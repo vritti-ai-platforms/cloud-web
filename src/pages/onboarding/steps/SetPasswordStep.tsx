@@ -7,7 +7,7 @@ import { Check, Lock } from 'lucide-react';
 import type React from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useOnboarding } from '@context/onboarding';
-import { useSetPassword } from '@hooks';
+import { useSetPassword } from '@hooks/onboarding';
 import type { SetPasswordFormData } from '@schemas/auth';
 import { setPasswordSchema } from '@schemas/auth';
 

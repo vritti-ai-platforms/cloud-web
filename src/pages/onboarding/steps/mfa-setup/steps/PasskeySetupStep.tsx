@@ -1,18 +1,19 @@
+import { usePasskeyRegistration } from '@hooks/onboarding/mfa';
+import type { BackupCodesResponse } from '@services/onboarding.service';
 import { Alert } from '@vritti/quantum-ui/Alert';
 import { Button } from '@vritti/quantum-ui/Button';
 import { Typography } from '@vritti/quantum-ui/Typography';
+import type { AxiosError } from 'axios';
 import { ArrowLeft, Fingerprint } from 'lucide-react';
 import type React from 'react';
 
 interface PasskeySetupStepProps {
   onBack: () => void;
-  onRegister: () => void;
-  isPending: boolean;
-  error: Error | null;
+  onSuccess: (response: BackupCodesResponse) => void;
 }
 
 // Returns user-friendly message from WebAuthn errors
-function getErrorMessage(error: Error | null): string | null {
+function getErrorMessage(error: AxiosError | Error | null): string | null {
   if (!error) return null;
 
   if (error.name === 'NotAllowedError') return 'Passkey registration was cancelled. Please try again.';
@@ -25,17 +26,19 @@ function getErrorMessage(error: Error | null): string | null {
 }
 
 // Passkey setup with biometric/PIN registration prompt
-export const PasskeySetupStep: React.FC<PasskeySetupStepProps> = ({
-  onBack,
-  onRegister,
-  isPending,
-  error,
-}) => {
-  const errorMessage = getErrorMessage(error);
+export const PasskeySetupStep: React.FC<PasskeySetupStepProps> = ({ onBack, onSuccess }) => {
+  const mutation = usePasskeyRegistration({ onSuccess });
+
+  const errorMessage = getErrorMessage(mutation.error);
 
   return (
     <div className="space-y-6">
-      <Button variant="ghost" onClick={onBack} disabled={isPending} className="inline-flex items-center gap-2 text-sm">
+      <Button
+        variant="ghost"
+        onClick={onBack}
+        disabled={mutation.isPending}
+        className="inline-flex items-center gap-2 text-sm"
+      >
         <ArrowLeft className="h-4 w-4" />
         Back to MFA options
       </Button>
@@ -56,21 +59,20 @@ export const PasskeySetupStep: React.FC<PasskeySetupStepProps> = ({
           <Fingerprint className="h-10 w-10 text-primary" />
         </div>
         <Typography variant="body2" intent="muted" align="center" className="max-w-[300px]">
-          {isPending
+          {mutation.isPending
             ? 'Follow the prompts on your device to create your passkey...'
             : 'When you click the button below, your device will prompt you to create a passkey using Face ID, Touch ID, or your device PIN.'}
         </Typography>
       </div>
 
       <Button
-        onClick={onRegister}
+        onClick={() => mutation.mutate()}
         className="w-full bg-primary text-primary-foreground"
-        isLoading={isPending}
+        isLoading={mutation.isPending}
         loadingText="Creating passkey..."
       >
         Create Passkey
       </Button>
-
     </div>
   );
 };

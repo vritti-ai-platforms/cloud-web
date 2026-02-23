@@ -6,7 +6,7 @@ import { Typography } from "@vritti/quantum-ui/Typography";
 import { ShieldCheck } from "lucide-react";
 import type React from "react";
 import { useForm } from "react-hook-form";
-import { useVerifyTotp } from '@hooks';
+import { useVerifyTotp } from '@hooks/auth';
 import type { OTPFormData } from '@schemas/auth';
 import { otpSchema } from '@schemas/auth';
 import type { LoginResponse } from '@services/auth.service';

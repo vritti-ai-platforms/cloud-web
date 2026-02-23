@@ -1,6 +1,6 @@
 import { useOnboarding } from '@context/onboarding';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useSendEmailOtp, useVerifyEmail } from '@hooks';
+import { useSendEmailOtp, useVerifyEmail } from '@hooks/onboarding';
 import type { OTPFormData } from '@schemas/auth';
 import { otpSchema } from '@schemas/auth';
 import { Button } from '@vritti/quantum-ui/Button';

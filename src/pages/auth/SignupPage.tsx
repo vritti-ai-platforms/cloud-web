@@ -1,7 +1,7 @@
 import { AuthDivider } from '@components/auth/AuthDivider';
 import { SocialAuthButtons } from '@components/auth/SocialAuthButtons';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useSignup } from '@hooks';
+import { useSignup } from '@hooks/auth';
 import type { SignupFormData } from '@schemas/auth';
 import { signupSchema } from '@schemas/auth';
 import { scheduleTokenRefresh, setToken } from '@vritti/quantum-ui/axios';

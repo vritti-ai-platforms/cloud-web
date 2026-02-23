@@ -8,7 +8,7 @@ import type React from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useOnboarding } from '@context/onboarding';
-import { useChangeEmail } from '@hooks';
+import { useChangeEmail } from '@hooks/onboarding';
 
 const changeEmailSchema = z.object({
   email: z.string().email('Please enter a valid email'),

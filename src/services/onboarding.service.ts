@@ -174,8 +174,8 @@ export function verifyPasskeySetup(credential: RegistrationResponseJSON): Promis
 export type VerificationMethod = 'whatsapp' | 'sms' | 'manual';
 
 export interface InitiateMobileVerificationDto {
-  phone?: string;
-  phoneCountry?: string;
+  phone: string;
+  phoneCountry: string;
   method: VerificationMethod;
 }
 

@@ -5,12 +5,13 @@ import type React from 'react';
 import { Navigate } from 'react-router-dom';
 import { MFASetupStep } from './steps/mfa-setup';
 import { SetPasswordStep } from './steps/SetPasswordStep';
+import { SuccessStep } from './steps/SuccessStep';
 import { VerifyEmailStep } from './steps/verify-email/VerifyEmailStep';
 import { VerifyMobileStep } from './steps/verify-mobile';
 
 // Renders the progress bar and the active onboarding step based on backend state
 export const OnboardingPage: React.FC = () => {
-  const { currentStep, isLoading, onboardingComplete } = useOnboarding();
+  const { currentStep, isLoading } = useOnboarding();
 
   if (isLoading) {
     return (
@@ -20,14 +21,16 @@ export const OnboardingPage: React.FC = () => {
     );
   }
 
-  // Completed → full reload to trigger AuthProvider with upgraded CLOUD session
-  if (onboardingComplete || currentStep === 'COMPLETED' || currentStep === 'COMPLETE') {
-    window.location.href = '/';
-    return null;
-  }
-
   const renderStep = () => {
     switch (currentStep) {
+      case 'COMPLETE':
+      case 'COMPLETED':
+        return (
+          <SuccessStep
+            hasMfa={false}
+            onContinue={() => { window.location.href = '/'; }}
+          />
+        );
       case 'EMAIL_VERIFICATION':
         return <VerifyEmailStep />;
       case 'PHONE_VERIFICATION':

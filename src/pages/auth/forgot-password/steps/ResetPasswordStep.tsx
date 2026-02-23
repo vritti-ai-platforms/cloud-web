@@ -6,9 +6,9 @@ import { Typography } from '@vritti/quantum-ui/Typography';
 import { KeyRound } from 'lucide-react';
 import type React from 'react';
 import { useForm } from 'react-hook-form';
-import type { PasswordResetFlow } from '../../../../hooks';
-import type { SetPasswordFormData } from '../../../../schemas/auth';
-import { setPasswordSchema } from '../../../../schemas/auth';
+import type { PasswordResetFlow } from '@hooks/password-reset';
+import type { SetPasswordFormData } from '@schemas/auth';
+import { setPasswordSchema } from '@schemas/auth';
 
 interface ResetPasswordStepProps {
   mutation: PasswordResetFlow['resetPasswordMutation'];

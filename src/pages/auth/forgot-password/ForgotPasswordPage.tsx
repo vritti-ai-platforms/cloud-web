@@ -1,5 +1,5 @@
+import { usePasswordResetFlow } from '@hooks/password-reset';
 import type React from 'react';
-import { usePasswordResetFlow } from '../../../hooks';
 import { EmailStep, OtpStep, ResetPasswordStep } from './steps';
 
 export const ForgotPasswordPage: React.FC = () => {
@@ -7,11 +7,7 @@ export const ForgotPasswordPage: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {flow.step === 'email' && (
-        <EmailStep
-          mutation={flow.forgotPasswordMutation}
-        />
-      )}
+      {flow.step === 'email' && <EmailStep mutation={flow.forgotPasswordMutation} />}
 
       {flow.step === 'otp' && (
         <OtpStep
@@ -22,11 +18,7 @@ export const ForgotPasswordPage: React.FC = () => {
         />
       )}
 
-      {flow.step === 'reset' && (
-        <ResetPasswordStep
-          mutation={flow.resetPasswordMutation}
-        />
-      )}
+      {flow.step === 'reset' && <ResetPasswordStep mutation={flow.resetPasswordMutation} />}
     </div>
   );
 };

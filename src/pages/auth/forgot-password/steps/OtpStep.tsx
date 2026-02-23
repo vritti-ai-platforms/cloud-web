@@ -6,9 +6,9 @@ import { Typography } from '@vritti/quantum-ui/Typography';
 import { ArrowLeft } from 'lucide-react';
 import type React from 'react';
 import { useForm } from 'react-hook-form';
-import type { PasswordResetFlow } from '../../../../hooks';
-import type { OTPFormData } from '../../../../schemas/auth';
-import { otpSchema } from '../../../../schemas/auth';
+import type { PasswordResetFlow } from '@hooks/password-reset';
+import type { OTPFormData } from '@schemas/auth';
+import { otpSchema } from '@schemas/auth';
 
 interface OtpStepProps {
   email: PasswordResetFlow['email'];

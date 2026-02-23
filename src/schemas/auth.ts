@@ -71,6 +71,7 @@ export const phoneSchema = z.object({
     .string()
     .min(10, 'Please enter a valid phone number')
     .regex(/^\+?[1-9]\d{1,14}$/, 'Please enter a valid phone number'),
+  phoneCountry: z.string().min(2).max(5),
 });
 
 export type PhoneFormData = z.infer<typeof phoneSchema>;

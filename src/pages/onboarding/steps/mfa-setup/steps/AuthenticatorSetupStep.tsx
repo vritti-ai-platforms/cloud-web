@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useInitiateTotpSetup, useVerifyTotpSetup } from '@hooks';
+import { useInitiateTotpSetup, useVerifyTotpSetup } from '@hooks/onboarding/mfa';
 import type { OTPFormData } from '@schemas/auth';
 import { otpSchema } from '@schemas/auth';
 import type { BackupCodesResponse } from '@services/onboarding.service';

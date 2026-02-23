@@ -1,10 +1,8 @@
-import {
-  MethodSwitcher,
-  PasskeyVerification,
-  SMSVerification,
-  TOTPVerification,
-} from '@components/auth/mfa-verification';
-import { useVerifyPasskey } from '@hooks';
+import { MethodSwitcher } from '@components/auth/mfa-verification/MethodSwitcher';
+import { PasskeyVerification } from '@components/auth/mfa-verification/PasskeyVerification';
+import { SMSVerification } from '@components/auth/mfa-verification/SMSVerification';
+import { TOTPVerification } from '@components/auth/mfa-verification/TOTPVerification';
+import { useVerifyPasskey } from '@hooks/auth';
 import type { LoginResponse, MFAChallenge, MFAMethod } from '@services/auth.service';
 import { startPasskeyVerification } from '@services/auth.service';
 import { startAuthentication } from '@simplewebauthn/browser';

@@ -7,7 +7,7 @@ import { Smartphone } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useSendSmsCode, useVerifySms } from '@hooks';
+import { useSendSmsCode, useVerifySms } from '@hooks/auth';
 import type { OTPFormData } from '@schemas/auth';
 import { otpSchema } from '@schemas/auth';
 import type { LoginResponse } from '@services/auth.service';

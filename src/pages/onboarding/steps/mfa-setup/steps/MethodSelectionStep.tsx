@@ -1,3 +1,4 @@
+import { useSkipMFASetup } from '@hooks/onboarding/mfa';
 import { Badge } from '@vritti/quantum-ui/Badge';
 import { Button } from '@vritti/quantum-ui/Button';
 import { Typography } from '@vritti/quantum-ui/Typography';
@@ -8,18 +9,16 @@ type MFAMethod = 'authenticator' | 'passkey';
 
 interface MethodSelectionStepProps {
   onMethodSelect: (method: MFAMethod) => void;
-  onSkip: () => void;
-  isSkipping: boolean;
-  error: string | null;
+  onSuccess: () => void;
 }
 
 // MFA method selection — clicking a card navigates directly to setup
 export const MethodSelectionStep: React.FC<MethodSelectionStepProps> = ({
   onMethodSelect,
-  onSkip,
-  isSkipping,
-  error,
+  onSuccess,
 }) => {
+  const skipMutation = useSkipMFASetup({ onSuccess });
+  const error = skipMutation.error?.message || null;
   const methods = [
     {
       id: 'passkey' as const,
@@ -59,7 +58,7 @@ export const MethodSelectionStep: React.FC<MethodSelectionStepProps> = ({
             variant="ghost"
             key={method.id}
             onClick={() => onMethodSelect(method.id)}
-            disabled={isSkipping}
+            disabled={skipMutation.isPending}
             className="w-full p-4 rounded-lg border-2 border-border hover:border-primary transition-all flex items-center gap-4 text-left group h-auto"
           >
             <div className="flex items-center justify-center w-10 h-10 shrink-0 rounded-lg bg-secondary text-foreground">
@@ -82,14 +81,14 @@ export const MethodSelectionStep: React.FC<MethodSelectionStepProps> = ({
       </div>
 
       <Typography variant="body2" align="center" intent="muted">
-        Email and SMS are already verified and available as backup options
+        Email and Phone are already verified and available as backup options
       </Typography>
 
       <Button
         variant="outline"
-        onClick={onSkip}
+        onClick={() => skipMutation.mutate()}
         className="w-full border-border text-foreground"
-        isLoading={isSkipping}
+        isLoading={skipMutation.isPending}
         loadingText="Skipping..."
       >
         Skip for now

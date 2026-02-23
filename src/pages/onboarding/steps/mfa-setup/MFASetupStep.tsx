@@ -1,5 +1,4 @@
 import { useOnboarding } from '@context/onboarding';
-import { usePasskeyRegistration, useSkipMFASetup } from '@hooks';
 import type { BackupCodesResponse } from '@services/onboarding.service';
 import type React from 'react';
 import { useState } from 'react';
@@ -7,18 +6,16 @@ import { AuthenticatorSetupStep } from './steps/AuthenticatorSetupStep';
 import { BackupCodesStep } from './steps/BackupCodesStep';
 import { MethodSelectionStep } from './steps/MethodSelectionStep';
 import { PasskeySetupStep } from './steps/PasskeySetupStep';
-import { SuccessStep } from './steps/SuccessStep';
 
 type MFAMethod = 'authenticator' | 'passkey';
-type MFASubStep = 'method-selection' | 'authenticator-setup' | 'passkey-setup' | 'backup-codes' | 'success';
+type MFASubStep = 'method-selection' | 'authenticator-setup' | 'passkey-setup' | 'backup-codes';
 
 // Derives the active sub-step from progress + selected method
 function getSubStep(progress: number, method: MFAMethod | null): MFASubStep {
   if (progress === 0) return 'method-selection';
   if (progress === 25 && method === 'authenticator') return 'authenticator-setup';
   if (progress === 25) return 'passkey-setup';
-  if (progress === 50) return 'backup-codes';
-  return 'success';
+  return 'backup-codes';
 }
 
 // MFA setup flow driven by OnboardingContext progress
@@ -28,24 +25,8 @@ export const MFASetupStep: React.FC = () => {
   const [backupCodes, setBackupCodes] = useState<string[] | null>(null);
   const [backupWarning, setBackupWarning] = useState('');
 
-  const skipMutation = useSkipMFASetup();
-  const passkeyMutation = usePasskeyRegistration();
-
-  // Skips MFA and goes to success
-  const handleSkip = async () => {
-    try {
-      await skipMutation.mutateAsync();
-      setProgress(75);
-    } catch {
-      // Error available via skipMutation.error
-    }
-  };
-
   // Returns to method selection
-  const handleBack = () => {
-    setProgress(0);
-    passkeyMutation.reset();
-  };
+  const handleBack = () => setProgress(0);
 
   // Handles successful TOTP or passkey verification
   const handleVerifySuccess = (response: BackupCodesResponse) => {
@@ -53,20 +34,6 @@ export const MFASetupStep: React.FC = () => {
     setBackupWarning(response.warning);
     setProgress(50);
   };
-
-  // Runs the full passkey registration flow
-  const handlePasskeyRegister = async () => {
-    try {
-      const response = await passkeyMutation.mutateAsync();
-      setBackupCodes(response.backupCodes);
-      setBackupWarning(response.warning);
-      setProgress(50);
-    } catch {
-      // Error available via passkeyMutation.error
-    }
-  };
-
-  const selectionError = skipMutation.error?.message || null;
 
   switch (getSubStep(progress, method)) {
     case 'method-selection':
@@ -76,9 +43,7 @@ export const MFASetupStep: React.FC = () => {
             setMethod(m);
             setProgress(25);
           }}
-          onSkip={handleSkip}
-          isSkipping={skipMutation.isPending}
-          error={selectionError}
+          onSuccess={() => { setProgress(75); refetch(); }}
         />
       );
 
@@ -89,12 +54,7 @@ export const MFASetupStep: React.FC = () => {
 
     case 'passkey-setup':
       return (
-        <PasskeySetupStep
-          onBack={handleBack}
-          onRegister={handlePasskeyRegister}
-          isPending={passkeyMutation.isPending}
-          error={passkeyMutation.error}
-        />
+        <PasskeySetupStep onBack={handleBack} onSuccess={handleVerifySuccess} />
       );
 
     case 'backup-codes':
@@ -102,19 +62,8 @@ export const MFASetupStep: React.FC = () => {
         <BackupCodesStep
           backupCodes={backupCodes}
           warning={backupWarning}
-          onContinue={() => setProgress(75)}
+          onContinue={refetch}
         />
       ) : null;
-
-    case 'success':
-      return (
-        <SuccessStep
-          hasMfa={!!backupCodes}
-          onContinue={() => {
-            setProgress(100);
-            refetch();
-          }}
-        />
-      );
   }
 };

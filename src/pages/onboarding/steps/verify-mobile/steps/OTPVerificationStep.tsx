@@ -1,15 +1,16 @@
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useInitiateMobileVerification, useVerifyMobileOtp } from '@hooks/onboarding/mobile-verification';
+import type { OTPFormData } from '@schemas/auth';
+import { otpSchema } from '@schemas/auth';
 import { Button } from '@vritti/quantum-ui/Button';
 import { Field, FieldGroup, FieldLabel, Form } from '@vritti/quantum-ui/Form';
 import { OTPField } from '@vritti/quantum-ui/OTPField';
 import type { PhoneValue } from '@vritti/quantum-ui/PhoneField';
 import { Typography } from '@vritti/quantum-ui/Typography';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowLeft, Smartphone } from 'lucide-react';
-import React, { useCallback, useState } from 'react';
+import type React from 'react';
+import { useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useInitiateMobileVerification, useVerifyMobileOtp } from '@hooks';
-import type { OTPFormData } from '@schemas/auth';
-import { otpSchema } from '@schemas/auth';
 
 interface OTPVerificationStepProps {
   phoneNumber: PhoneValue;
