@@ -22,6 +22,7 @@ export const AuthSuccessPage: React.FC = () => {
   // Detect source: email signup (from frontend) has isEmail in state, OAuth (from server) doesn't
   const state = (location.state as AuthSuccessState) || {};
   const isEmail = state.isEmail ?? false;
+  const isResume = searchParams.get('resume') === 'true';
 
   // Email signup: sends initial email OTP then navigates to onboarding
   const sendEmailOtpMutation = useSendEmailOtp({
@@ -30,8 +31,12 @@ export const AuthSuccessPage: React.FC = () => {
     },
   });
 
-  const title = 'Welcome to Vritti AI Cloud!';
-  const subtitle = isEmail ? "We've sent a verification code to your email" : "Let's finish setting up your account";
+  const title = isResume ? 'Welcome back!' : 'Welcome to Vritti AI Cloud!';
+  const subtitle = isEmail
+    ? "We've sent a verification code to your email"
+    : isResume
+      ? "Let's pick up where you left off"
+      : "Let's finish setting up your account";
 
   // Next steps - same for all users
   const nextSteps = [
@@ -47,7 +52,7 @@ export const AuthSuccessPage: React.FC = () => {
       sendEmailOtpMutation.mutate();
     } else {
       // OAuth: navigate directly to onboarding (axios will auto-recover token on first API call)
-      toast.success('Set a Password');
+      if (!isResume) toast.success('Set a Password');
       navigate('../onboarding', { replace: true });
     }
   };
@@ -105,11 +110,11 @@ export const AuthSuccessPage: React.FC = () => {
         isLoading={sendEmailOtpMutation.isPending}
         loadingText="Loading..."
       >
-        Start Onboarding
+        {isResume ? 'Resume Onboarding' : 'Start Onboarding'}
       </Button>
 
       <Typography variant="caption" align="center" intent="muted" className="text-center">
-        Just a few quick steps to secure your account
+        {isResume ? 'Continue from where you left off' : 'Just a few quick steps to secure your account'}
       </Typography>
     </div>
   );
