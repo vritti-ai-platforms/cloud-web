@@ -43,6 +43,7 @@ export interface LoginResponse {
   expiresIn?: number;
   requiresMfa?: boolean;
   mfaChallenge?: MFAChallenge;
+  requiresOnboarding?: boolean;
   user?: {
     id: string;
     email: string;

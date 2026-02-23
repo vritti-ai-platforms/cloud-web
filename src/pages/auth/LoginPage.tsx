@@ -39,6 +39,12 @@ export const LoginPage: React.FC = () => {
         return;
       }
 
+      // Incomplete onboarding — refresh cookie is set, interceptor recovers token on first API call
+      if (response.requiresOnboarding) {
+        window.location.href = '/onboarding';
+        return;
+      }
+
       // Store access token
       if (response.accessToken) {
         setToken(response.accessToken);
