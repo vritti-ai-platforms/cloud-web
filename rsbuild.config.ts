@@ -16,7 +16,7 @@ export default defineConfig({
     writeToDisk: true, // Write build outputs to disk in dev mode
   },
   server: {
-    port: 3001,
+    port: 3012,
     ...(useHttps && {
       https: {
         key: readFileSync('./certs/local.vrittiai.com+4-key.pem'),
