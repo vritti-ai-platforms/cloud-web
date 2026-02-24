@@ -16,7 +16,7 @@
     "@hookform/resolvers": "^5.2.2",
     "@simplewebauthn/browser": "^13.2.2",
     "@tanstack/react-query": "5.90.20",
-    "@vritti/quantum-ui": "0.2.9",
+    "@vritti/quantum-ui": "0.2.10",
     "axios": "^1.13.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

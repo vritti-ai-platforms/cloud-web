@@ -3,4 +3,4 @@
 // @services/settings.service, @services/verification.service
 // @services/user.service
 
-export { type AuthStatusResponse, type User, getAuthStatus, logout, logoutAll } from './user.service';
+export { type AuthStatusResponse, getAuthStatus, logout, logoutAll, type User } from './user.service';
