@@ -1,14 +1,14 @@
-# vritti-auth - Development Best Practices
+# vritti-cloud-web - Development Best Practices
 
-This document outlines the conventions and best practices for the vritti-auth frontend application.
+This document outlines the conventions and best practices for the vritti-cloud-web frontend application.
 
 ## Project Overview
 
-vritti-auth is a React authentication micro-frontend built with:
+vritti-cloud-web is a standalone React web application built with:
 - **React 19** with TypeScript
 - **Tailwind CSS v4** for styling
 - **@vritti/quantum-ui** component library
-- **Module Federation** for micro-frontend architecture
+- **Standalone app (no module federation)**
 - **React Router** for navigation
 - **TanStack Query** for server state management
 
@@ -136,22 +136,12 @@ The quantum-ui `Form` component automatically maps API errors to form fields usi
 
 **CRITICAL: Follow these optimization patterns in `rsbuild.config.ts`.**
 
-1. **Extract shared dependencies to constants**
-   - Improves maintainability and reusability
-   - Use `as const` for readonly configuration
-   - Centralize Module Federation shared config
-
-2. **Type custom plugins properly**
-   - Import `RsbuildPlugin` type from `@rsbuild/core`
-   - Provides type safety and autocomplete for plugin API
-   - Makes plugin contract explicit
-
-3. **Optimize imports for tree-shaking**
+1. **Optimize imports for tree-shaking**
    - Use specific imports: `import { readFileSync } from 'node:fs'`
    - Avoid wildcard imports: `import * as fs from 'fs'`
    - Enables better bundle optimization
 
-4. **Extract environment-derived values**
+2. **Extract environment-derived values**
    - Calculate protocol, host, and URLs once at top level
    - Avoids repeated conditional logic
    - Makes configuration clearer
@@ -159,8 +149,7 @@ The quantum-ui `Form` component automatically maps API errors to form fields usi
 **Example** (`rsbuild.config.ts`):
 ```typescript
 import { readFileSync } from 'node:fs';
-import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
-import { defineConfig, type RsbuildPlugin } from '@rsbuild/core';
+import { defineConfig } from '@rsbuild/core';
 import { pluginReact } from '@rsbuild/plugin-react';
 
 // Environment configuration
@@ -169,64 +158,31 @@ const protocol = useHttps ? 'https' : 'http';
 const host = 'local.vrittiai.com';
 const defaultApiHost = `${protocol}://${host}:3000`;
 
-// Shared dependencies configuration for Module Federation
-const SHARED_DEPENDENCIES = {
-  react: {
-    singleton: true,
-    requiredVersion: '^19.2.0',
-    eager: true,
-  },
-  'react-dom': {
-    singleton: true,
-    requiredVersion: '^19.2.0',
-    eager: true,
-  },
-  'react-router-dom': {
-    singleton: true,
-    eager: true,
-  },
-  '@vritti/quantum-ui': {
-    singleton: true,
-    eager: true,
-  },
-} as const;
-
-// Custom plugin with proper typing
-const manifestMessagePlugin: RsbuildPlugin = {
-  name: 'plugin-manifest-message',
-  setup: (api) => {
-    api.onAfterStartDevServer(({ port }) => {
-      api.logger.info(`➜  Manifest: ${protocol}://${host}:${port}/mf-manifest.json`);
-    });
-  },
-};
-
 export default defineConfig({
-  // ... rest of config
-  plugins: [
-    pluginReact(),
-    manifestMessagePlugin,
-    pluginModuleFederation({
-      name: 'vritti_auth',
-      exposes: {
-        './routes': './src/routes.tsx',
+  output: {
+    assetPrefix: '/cloud-web/',
+  },
+  server: {
+    port: 3001,
+    proxy: {
+      '/api': {
+        target: process.env.PUBLIC_API_URL || defaultApiHost,
+        changeOrigin: true,
+        secure: false,
+        pathRewrite: (path) => path.replace(/^\/api/, ''),
       },
-      shared: SHARED_DEPENDENCIES,
-    }),
-  ],
+    },
+  },
+  plugins: [pluginReact()],
 });
 ```
 
 **DO**:
-- ✅ Extract `SHARED_DEPENDENCIES` constant for Module Federation
-- ✅ Type custom plugins with `RsbuildPlugin` interface
 - ✅ Use specific imports: `import { readFileSync } from 'node:fs'`
 - ✅ Calculate environment-derived values at top level
 - ✅ Use arrow functions for inline plugin callbacks
 
 **DON'T**:
-- ❌ Repeat shared dependency configuration
-- ❌ Leave custom plugins untyped
 - ❌ Use wildcard imports: `import * as fs from 'fs'`
 - ❌ Repeat protocol/host calculation throughout config
 - ❌ Inline complex configuration objects
@@ -292,17 +248,10 @@ pnpm dev                    # Starts on http://local.vrittiai.com:3001
 USE_HTTPS=true pnpm dev     # Starts on https://local.vrittiai.com:3001
 ```
 
-**Running standalone vs with host**:
-- **Standalone**: Run `pnpm dev` to test auth flows in isolation
-- **With host**: Run `vritti-web-nexus` first, it will load this as a remote
-
 **Access URLs**:
 - **HTTP**: `http://local.vrittiai.com:3001`
 - **HTTPS**: `https://local.vrittiai.com:3001`
-- **Manifest**: `{protocol}://local.vrittiai.com:3001/mf-manifest.json`
 
 **Important Notes**:
-- Port `3001` is the default for vritti-auth
-- When running with host, protocol must match (HTTP with HTTP, HTTPS with HTTPS)
+- Port `3001` is the default for vritti-cloud-web
 - The dev server writes build outputs to disk (`writeToDisk: true`)
-- Manifest URL is logged on server start for Module Federation setup

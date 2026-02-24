@@ -1,6 +1,7 @@
 import { OnboardingProvider } from '@context/onboarding';
 import type { RouteObject } from 'react-router-dom';
-import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
+import { AppLayout } from './components/layouts/AppLayout';
 import { AuthLayout } from './components/layouts/AuthLayout';
 import './index.css';
 import { AuthErrorPage } from './pages/auth/AuthErrorPage';
@@ -13,8 +14,8 @@ import { OnboardingPage } from './pages/onboarding/OnboardingPage';
 import { ProfilePage } from './pages/settings/ProfilePage';
 import { SecurityPage } from './pages/settings/SecurityPage';
 
-// Auth routes exported for Module Federation consumption by the host app
-export const authRoutes: RouteObject[] = [
+// Routes shown when the user is not authenticated
+export const publicRoutes: RouteObject[] = [
   {
     path: '/',
     element: <AuthLayout />,
@@ -47,7 +48,6 @@ export const authRoutes: RouteObject[] = [
         path: 'mfa-verify',
         element: <MFAVerificationPage />,
       },
-      // Onboarding route — OnboardingProvider wraps OnboardingPage
       {
         path: 'onboarding',
         element: (
@@ -60,16 +60,24 @@ export const authRoutes: RouteObject[] = [
   },
 ];
 
-export const accountRoutes: RouteObject[] = [
+// Routes shown when the user is authenticated
+export const authenticatedRoutes: RouteObject[] = [
   {
-    path: 'profile',
-    element: <ProfilePage />,
-  },
-  {
-    path: 'security',
-    element: <SecurityPage />,
+    path: '/',
+    element: <AppLayout />,
+    children: [
+      {
+        index: true,
+        element: <Navigate to="/account/profile" replace />,
+      },
+      {
+        path: 'account/profile',
+        element: <ProfilePage />,
+      },
+      {
+        path: 'account/security',
+        element: <SecurityPage />,
+      },
+    ],
   },
 ];
-
-// Browser router for standalone mode (running vritti-auth independently)
-export const router = createBrowserRouter(authRoutes);

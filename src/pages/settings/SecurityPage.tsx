@@ -1,4 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  useChangePassword,
+  useRevokeAllOtherSessions,
+  useRevokeSession,
+  useSessions,
+} from '@hooks/settings/useSecurity';
+import type { ChangePasswordFormData } from '@schemas/settings';
+import { changePasswordSchema } from '@schemas/settings';
 import { Badge } from '@vritti/quantum-ui/Badge';
 import { Button } from '@vritti/quantum-ui/Button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@vritti/quantum-ui/Card';
@@ -12,14 +20,6 @@ import { AlertTriangle, CheckCircle, Info, Lock, LogOut, Monitor } from 'lucide-
 import type React from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  useChangePassword,
-  useRevokeAllOtherSessions,
-  useRevokeSession,
-  useSessions,
-} from '@hooks/settings/useSecurity';
-import type { ChangePasswordFormData } from '@schemas/settings';
-import { changePasswordSchema } from '@schemas/settings';
 
 export const SecurityPage: React.FC = () => {
   const { data: sessions, isLoading: isLoadingSessions } = useSessions();
@@ -107,11 +107,7 @@ export const SecurityPage: React.FC = () => {
           <CardDescription>Update your password to keep your account secure</CardDescription>
         </CardHeader>
         <CardContent>
-          <Form
-            form={passwordForm}
-            mutation={changePasswordMutation}
-            onSubmit={handlePasswordSubmit}
-          >
+          <Form form={passwordForm} mutation={changePasswordMutation} onSubmit={handlePasswordSubmit}>
             <FieldGroup>
               {/* Current Password */}
               <PasswordField
@@ -173,9 +169,7 @@ export const SecurityPage: React.FC = () => {
       <Card>
         <CardHeader>
           <CardTitle>Two-Factor Authentication</CardTitle>
-          <CardDescription>
-            Add an extra layer of security to your account
-          </CardDescription>
+          <CardDescription>Add an extra layer of security to your account</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-between">
@@ -191,8 +185,8 @@ export const SecurityPage: React.FC = () => {
               </Typography>
             </div>
             <Switch
-              checked={false}
-              disabled
+              // checked={false}
+              // disabled
               aria-label="Enable two-factor authentication"
             />
           </div>
@@ -249,10 +243,7 @@ export const SecurityPage: React.FC = () => {
                   <Separator />
                   <div className="space-y-3">
                     {otherSessions.map((session) => (
-                      <div
-                        key={session.sessionId}
-                        className="border border-border rounded-lg p-4"
-                      >
+                      <div key={session.sessionId} className="border border-border rounded-lg p-4">
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex gap-3">
                             <div className="flex-shrink-0 mt-1">
@@ -373,7 +364,8 @@ export const SecurityPage: React.FC = () => {
                 <div>
                   <CardTitle>Sign Out All Devices</CardTitle>
                   <CardDescription className="mt-1.5">
-                    Are you sure you want to sign out from all other devices? All other sessions will be terminated immediately.
+                    Are you sure you want to sign out from all other devices? All other sessions will be terminated
+                    immediately.
                   </CardDescription>
                 </div>
               </div>

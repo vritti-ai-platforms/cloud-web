@@ -1,3 +1,4 @@
+export { useAuthStatus, useLogout, useLogoutAll } from './useAuthStatus';
 export { useLogin } from './useLogin';
 export {
   useSendSmsCode,
