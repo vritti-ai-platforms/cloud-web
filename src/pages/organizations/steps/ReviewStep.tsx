@@ -1,0 +1,104 @@
+import { useCreateOrganization } from '@hooks/organizations';
+import type { CreateOrgFormData, IndustryOption, OrgPlan } from '@schemas/organizations';
+import { Button } from '@vritti/quantum-ui/Button';
+import { Checkbox } from '@vritti/quantum-ui/Checkbox';
+import { Form } from '@vritti/quantum-ui/Form';
+import { Typography } from '@vritti/quantum-ui/Typography';
+import { ArrowLeft, Check } from 'lucide-react';
+import type React from 'react';
+import type { UseFormReturn } from 'react-hook-form';
+
+interface ReviewStepProps {
+  form: UseFormReturn<CreateOrgFormData>;
+  industries: IndustryOption[] | undefined;
+  selectedPlan: OrgPlan;
+  agreedToTerms: boolean;
+  onAgreedToTermsChange: (checked: boolean) => void;
+  createMutation: ReturnType<typeof useCreateOrganization>;
+  onBack: () => void;
+  onEditBasicInfo: () => void;
+  onChangePlan: () => void;
+}
+
+export const ReviewStep: React.FC<ReviewStepProps> = ({
+  form,
+  industries,
+  selectedPlan,
+  agreedToTerms,
+  onAgreedToTermsChange,
+  createMutation,
+  onBack,
+  onEditBasicInfo,
+  onChangePlan,
+}) => {
+  return (
+    <div className="space-y-4">
+      {/* Organization details summary */}
+      <div className="rounded-lg border p-4 space-y-3">
+        <div className="flex items-center justify-between">
+          <Typography variant="subtitle2">Organization Details</Typography>
+          <Button variant="link" className="p-0 h-auto" onClick={onEditBasicInfo}>
+            Edit
+          </Button>
+        </div>
+        {[
+          { label: 'Name', value: form.getValues('name') },
+          { label: 'URL', value: `${form.getValues('subdomain')}.vrittiai.com` },
+          { label: 'Size', value: `${form.getValues('size')} employees` },
+          {
+            label: 'Industry',
+            value: industries?.find((i) => i.id === form.getValues('industryId'))?.name ?? '—',
+          },
+        ].map(({ label, value }) => (
+          <div key={label} className="flex justify-between text-sm">
+            <span className="text-muted-foreground">{label}</span>
+            <span className="font-medium">{value}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Plan summary */}
+      <div className="rounded-lg border p-4">
+        <div className="flex items-center justify-between">
+          <Typography variant="subtitle2">Selected Plan</Typography>
+          <Button variant="link" className="p-0 h-auto" onClick={onChangePlan}>
+            Change
+          </Button>
+        </div>
+        <Typography variant="body1" className="font-medium capitalize mt-2">
+          {selectedPlan}
+        </Typography>
+      </div>
+
+      {/* Terms + navigation */}
+      <Form
+        form={form}
+        mutation={createMutation}
+        transformSubmit={(data) => ({
+          name: data.name,
+          subdomain: data.subdomain,
+          orgIdentifier: data.subdomain,
+          size: data.size,
+          plan: data.plan,
+          industryId: data.industryId,
+        })}
+      >
+        <Checkbox
+          label="I agree to the Terms of Service and Privacy Policy."
+          checked={agreedToTerms}
+          onCheckedChange={(checked) => onAgreedToTermsChange(checked === true)}
+        />
+        <div className="flex justify-between pt-2">
+          <Button type="button" variant="outline" onClick={onBack}>
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back
+          </Button>
+          <Button type="submit" disabled={!agreedToTerms} isLoading={createMutation.isPending}>
+            <Check className="h-4 w-4 mr-2" />
+            Create Company
+          </Button>
+        </div>
+      </Form>
+    </div>
+  );
+};

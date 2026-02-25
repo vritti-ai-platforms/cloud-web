@@ -12,6 +12,13 @@ export default defineConfig({
   output: {
     assetPrefix: '/cloud-web/',
   },
+  resolve: {
+    alias: {
+      react: require.resolve('react'),
+      'react-dom': require.resolve('react-dom'),
+      '@tanstack/react-query': require.resolve('@tanstack/react-query'),
+    },
+  },
   dev: {
     writeToDisk: true, // Write build outputs to disk in dev mode
   },
