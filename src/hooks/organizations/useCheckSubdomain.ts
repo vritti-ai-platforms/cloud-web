@@ -1,4 +1,4 @@
-import { type SubdomainAvailability } from '@schemas/organizations';
+import type { SubdomainAvailability } from '@schemas/organizations';
 import { checkSubdomain } from '@services/organizations.service';
 import { type UseMutationOptions, useMutation } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
