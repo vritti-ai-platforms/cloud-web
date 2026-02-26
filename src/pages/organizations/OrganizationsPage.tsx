@@ -21,8 +21,7 @@ export const OrganizationsPage: React.FC = () => {
             Manage your organizations and their configurations
           </Typography>
         </div>
-        <Button onClick={() => navigate('/organizations/new')}>
-          <Plus className="h-4 w-4 mr-2" />
+        <Button startAdornment={<Plus />} onClick={() => navigate('/organizations/new')}>
           New Organization
         </Button>
       </div>

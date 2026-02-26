@@ -24,15 +24,9 @@ export const HomePage: React.FC = () => {
               Manage your organizations and their configurations
             </Typography>
           </div>
-          <div className="flex items-center gap-2 shrink-0">
-            <Button variant="ghost" size="sm" onClick={() => navigate('/organizations')}>
-              View All <ArrowRight className="h-4 w-4" />
-            </Button>
-            <Button onClick={() => navigate('/organizations/new')}>
-              <Plus className="h-4 w-4 mr-2" />
-              New Organization
-            </Button>
-          </div>
+          <Button startAdornment={<Plus />} onClick={() => navigate('/organizations/new')}>
+            New Organization
+          </Button>
         </div>
 
         {/* Cards grid — max 3 */}
@@ -55,11 +49,11 @@ export const HomePage: React.FC = () => {
           )}
         </div>
 
-        {/* Truncation note when there are more orgs than shown */}
+        {/* Link to full list when there are more orgs than shown */}
         {data?.hasMore && (
-          <Typography variant="body2" intent="muted">
-            Showing 3 of {data.total} organizations.
-          </Typography>
+          <Button variant="link" size="sm" className="px-0" endAdornment={<ArrowRight />} onClick={() => navigate('/organizations')}>
+            View all {data.total} organizations
+          </Button>
         )}
       </div>
 
@@ -73,8 +67,8 @@ export const HomePage: React.FC = () => {
               Invitation requests to join organizations
             </Typography>
           </div>
-          <Button variant="ghost" size="sm" onClick={() => navigate('/invitations')}>
-            View All <ArrowRight className="h-4 w-4" />
+          <Button variant="ghost" size="sm" endAdornment={<ArrowRight />} onClick={() => navigate('/invitations')}>
+            View All
           </Button>
         </div>
 
