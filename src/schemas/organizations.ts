@@ -31,6 +31,15 @@ export interface OrgListItem {
   plan: OrgPlan;
   role: OrgMemberRole;
   createdAt: string;
+  updatedAt: string | null;
+}
+
+export interface PaginatedResponse<T> {
+  result: T[];
+  total: number;
+  offset: number;
+  limit: number;
+  hasMore: boolean;
 }
 
 // Zod schema for create org form

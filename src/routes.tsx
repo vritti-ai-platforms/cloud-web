@@ -12,7 +12,9 @@ import { MFAVerificationPage } from './pages/auth/MFAVerificationPage';
 import { SignupPage } from './pages/auth/SignupPage';
 import { HomePage } from './pages/home/HomePage';
 import { OnboardingPage } from './pages/onboarding/OnboardingPage';
+import { InvitationsPage } from './pages/invitations/InvitationsPage';
 import { CreateOrganizationPage } from './pages/organizations/CreateOrganizationPage';
+import { OrganizationsPage } from './pages/organizations/OrganizationsPage';
 import { ProfilePage } from './pages/settings/ProfilePage';
 import { SecurityPage } from './pages/settings/SecurityPage';
 
@@ -77,8 +79,16 @@ export const authenticatedRoutes: RouteObject[] = [
         element: <HomePage />,
       },
       {
+        path: 'organizations',
+        element: <OrganizationsPage />,
+      },
+      {
         path: 'organizations/new',
         element: <CreateOrganizationPage />,
+      },
+      {
+        path: 'invitations',
+        element: <InvitationsPage />,
       },
       {
         path: 'account/profile',

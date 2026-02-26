@@ -13,7 +13,7 @@ export function useCreateOrganization({ onSuccess, ...options }: UseCreateOrgOpt
     ...options,
     mutationFn: createOrganization,
     onSuccess: (data, ...args) => {
-      queryClient.invalidateQueries({ queryKey: MY_ORGS_QUERY_KEY });
+      queryClient.invalidateQueries({ queryKey: MY_ORGS_QUERY_KEY() });
       onSuccess?.(data, ...args);
     },
   });
