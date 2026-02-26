@@ -2,6 +2,7 @@ import type { useCreateOrganization } from '@hooks/organizations';
 import type { CreateOrgFormData, OrgPlan } from '@schemas/organizations';
 import { Button } from '@vritti/quantum-ui/Button';
 import { Checkbox } from '@vritti/quantum-ui/Checkbox';
+import { FilePreview } from '@vritti/quantum-ui/FilePreview';
 import { Form } from '@vritti/quantum-ui/Form';
 import { Typography } from '@vritti/quantum-ui/Typography';
 import { ArrowLeft, Check } from 'lucide-react';
@@ -29,6 +30,8 @@ export const ReviewStep: React.FC<ReviewStepProps> = ({
   onEditBasicInfo,
   onChangePlan,
 }) => {
+  const logo = form.getValues('logo');
+
   return (
     <div className="space-y-4">
       {/* Organization details summary */}
@@ -44,13 +47,25 @@ export const ReviewStep: React.FC<ReviewStepProps> = ({
           { label: 'URL', value: `${form.getValues('subdomain')}.vrittiai.com` },
           { label: 'Size', value: `${form.getValues('size')} employees` },
           { label: 'Industry', value: form.getValues('industryName') ?? '—' },
-          { label: 'Logo', value: form.getValues('logo')?.name ?? '—' },
         ].map(({ label, value }) => (
           <div key={label} className="flex justify-between text-sm">
             <span className="text-muted-foreground">{label}</span>
             <span className="font-medium">{value}</span>
           </div>
         ))}
+
+        {/* Logo row with thumbnail */}
+        <div className="flex justify-between items-center text-sm">
+          <span className="text-muted-foreground">Logo</span>
+          {logo ? (
+            <div className="flex items-center gap-2">
+              <FilePreview file={logo} size={32} className="rounded-full" />
+              <span className="font-medium max-w-36 truncate">{logo.name}</span>
+            </div>
+          ) : (
+            <span className="font-medium">—</span>
+          )}
+        </div>
       </div>
 
       {/* Plan summary */}

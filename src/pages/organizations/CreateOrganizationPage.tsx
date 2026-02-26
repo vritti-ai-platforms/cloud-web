@@ -34,7 +34,6 @@ export const CreateOrganizationPage: React.FC = () => {
     onSuccess: () => navigate('/home'),
   });
 
-
   const selectedPlan = form.watch('plan') ?? OrgPlan.free;
 
   return (
@@ -42,9 +41,9 @@ export const CreateOrganizationPage: React.FC = () => {
       {/* Header */}
       <div className="flex items-start justify-between px-6 pt-6 pb-0">
         <div>
-          <Typography variant="h4">Create a new company</Typography>
+          <Typography variant="h4">Create a new organization</Typography>
           <Typography variant="body2" intent="muted">
-            Set up your company workspace in a few steps
+            Set up your organization workspace in a few steps
           </Typography>
         </div>
         <Button variant="ghost" size="sm" onClick={() => navigate('/home')}>
@@ -59,12 +58,7 @@ export const CreateOrganizationPage: React.FC = () => {
 
       {/* Step content */}
       <div className="px-6 py-6 space-y-6">
-        {step === 1 && (
-          <BasicInfoStep
-            form={form}
-            onContinue={() => setStep(2)}
-          />
-        )}
+        {step === 1 && <BasicInfoStep form={form} onContinue={() => setStep(2)} />}
 
         {step === 2 && (
           <ChoosePlanStep
