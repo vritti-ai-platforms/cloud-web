@@ -27,7 +27,7 @@ export interface OrgListItem {
   orgIdentifier: string;
   industryId: number | null;
   size: OrgSize;
-  mediaId: number | null;
+  mediaId: string | null;
   plan: OrgPlan;
   role: OrgMemberRole;
   createdAt: string;
@@ -44,6 +44,7 @@ export const createOrganizationSchema = z.object({
   plan: z.enum(Object.values(OrgPlan) as [OrgPlan, ...OrgPlan[]]),
   industryId: z.number().optional(),
   industryName: z.string().optional(),
+  logo: z.instanceof(File).refine((f) => f.size <= 10 * 1024 * 1024, 'File must be under 10MB').optional(),
 });
 
 // Use output type so plan is always OrgPlan (never undefined) after .default()
@@ -53,12 +54,3 @@ export interface SubdomainAvailability {
   available: boolean;
 }
 
-// What gets sent to the API
-export interface CreateOrgDto {
-  name: string;
-  subdomain: string;
-  orgIdentifier: string; // auto-set to subdomain value on submit
-  size: OrgSize;
-  plan?: OrgPlan;
-  industryId?: number;
-}

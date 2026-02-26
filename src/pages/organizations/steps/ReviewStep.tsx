@@ -44,6 +44,7 @@ export const ReviewStep: React.FC<ReviewStepProps> = ({
           { label: 'URL', value: `${form.getValues('subdomain')}.vrittiai.com` },
           { label: 'Size', value: `${form.getValues('size')} employees` },
           { label: 'Industry', value: form.getValues('industryName') ?? '—' },
+          { label: 'Logo', value: form.getValues('logo')?.name ?? '—' },
         ].map(({ label, value }) => (
           <div key={label} className="flex justify-between text-sm">
             <span className="text-muted-foreground">{label}</span>
@@ -69,14 +70,18 @@ export const ReviewStep: React.FC<ReviewStepProps> = ({
       <Form
         form={form}
         mutation={createMutation}
-        transformSubmit={(data) => ({
-          name: data.name,
-          subdomain: data.subdomain,
-          orgIdentifier: data.subdomain,
-          size: data.size,
-          plan: data.plan,
-          industryId: data.industryId,
-        })}
+        showRootError
+        transformSubmit={(data) => {
+          const formData = new FormData();
+          formData.append('name', data.name);
+          formData.append('subdomain', data.subdomain);
+          formData.append('orgIdentifier', data.subdomain);
+          formData.append('size', data.size);
+          formData.append('plan', data.plan);
+          if (data.industryId != null) formData.append('industryId', String(data.industryId));
+          if (data.logo) formData.append('file', data.logo);
+          return formData;
+        }}
       >
         <Checkbox
           label="I agree to the Terms of Service and Privacy Policy."
