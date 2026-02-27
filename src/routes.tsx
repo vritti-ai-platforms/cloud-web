@@ -99,7 +99,7 @@ export const cloudRoutes: RouteObject[] = [
         element: <OrganizationsPage />,
       },
       {
-        path: 'organizations/new',
+        path: 'new-organization',
         element: <CreateOrganizationPage />,
       },
       {

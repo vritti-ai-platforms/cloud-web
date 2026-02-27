@@ -1,9 +1,13 @@
 import { Breadcrumb } from '@vritti/quantum-ui/Breadcrumb';
 import { Button } from '@vritti/quantum-ui/Button';
-import { Bell, Sparkles } from 'lucide-react';
+import { Bell, ChevronRight, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import logoImg from '../../assets/vritti-cloud.png';
+import { CompanySwitcher } from '../company-switcher';
 import { UserMenu } from './UserMenu';
+
+// Org slugs use the `org-` prefix (e.g., org-healthfirst~uuid)
+const ORG_SLUG_PREFIX = 'org-';
 
 export const TopBar = () => {
   return (
@@ -14,9 +18,25 @@ export const TopBar = () => {
           <img src={logoImg} alt="Vritti Logo" className="h-8" />
         </Link>
 
+        <ChevronRight className="size-4 text-muted-foreground shrink-0 mx-2" />
+
         {/* Breadcrumb */}
-        <div className="flex-1 px-6">
-          <Breadcrumb maxItems={4} />
+        <div className="flex-1">
+          <Breadcrumb
+            maxItems={4}
+            renderSegment={(segment) => {
+              // First-level segment with org- prefix = org slug
+              if (segment.path.match(/^\/[^/]+$/) && segment.raw.startsWith(ORG_SLUG_PREFIX)) {
+                return (
+                  <CompanySwitcher
+                    currentOrgId={segment.id ?? segment.raw}
+                    currentOrgName={segment.slug ? segment.label : undefined}
+                  />
+                );
+              }
+              return undefined;
+            }}
+          />
         </div>
 
         {/* Right Actions */}

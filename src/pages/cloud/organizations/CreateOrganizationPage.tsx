@@ -46,7 +46,7 @@ export const CreateOrganizationPage: React.FC = () => {
             Set up your organization workspace in a few steps
           </Typography>
         </div>
-        <Button variant="ghost" size="sm" onClick={() => navigate('/home')}>
+        <Button variant="ghost" size="sm" onClick={() => navigate('/')}>
           Cancel
         </Button>
       </div>

@@ -24,7 +24,7 @@ export const HomePage: React.FC = () => {
               Manage your organizations and their configurations
             </Typography>
           </div>
-          <Button startAdornment={<Plus />} onClick={() => navigate('/organizations/new')}>
+          <Button startAdornment={<Plus />} onClick={() => navigate('/new-organization')}>
             New Organization
           </Button>
         </div>
