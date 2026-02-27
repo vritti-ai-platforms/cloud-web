@@ -31,7 +31,7 @@ export const CreateOrganizationPage: React.FC = () => {
   });
 
   const createMutation = useCreateOrganization({
-    onSuccess: () => navigate('/home'),
+    onSuccess: () => navigate('/'),
   });
 
   const selectedPlan = form.watch('plan') ?? OrgPlan.free;

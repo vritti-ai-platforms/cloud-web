@@ -1,6 +1,5 @@
-import { AppSidebar } from '@vritti/quantum-ui/AppSidebar';
-import type { SidebarNavGroup } from '@vritti/quantum-ui/AppSidebar';
-import { SidebarInset, SidebarProvider } from '@vritti/quantum-ui/Sidebar';
+import { Sidebar, SidebarInset, SidebarProvider } from '@vritti/quantum-ui/Sidebar';
+import type { SidebarNavGroup } from '@vritti/quantum-ui/Sidebar';
 import {
   Building2,
   CreditCard,
@@ -15,9 +14,9 @@ import { Outlet, useParams } from 'react-router-dom';
 import { TopBar } from './TopBar';
 
 // Builds sidebar nav groups with org-scoped paths
-function useOrgNavGroups(orgId: string): SidebarNavGroup[] {
+function useOrgNavGroups(orgSlug: string): SidebarNavGroup[] {
   return useMemo(() => {
-    const base = `/organization/${orgId}`;
+    const base = `/${orgSlug}`;
     return [
       {
         label: 'Organization',
@@ -49,18 +48,18 @@ function useOrgNavGroups(orgId: string): SidebarNavGroup[] {
         ],
       },
     ];
-  }, [orgId]);
+  }, [orgSlug]);
 }
 
 // Layout with sidebar for organization-scoped pages
 export const OrgLayout = () => {
-  const { orgId } = useParams<{ orgId: string }>();
-  const navGroups = useOrgNavGroups(orgId!);
+  const { orgSlug } = useParams<{ orgSlug: string }>();
+  const navGroups = useOrgNavGroups(orgSlug!);
 
   return (
     <SidebarProvider>
       <TopBar />
-      <AppSidebar groups={navGroups} topOffset={14} />
+      <Sidebar groups={navGroups} topOffset={14} />
       <SidebarInset className="pt-14">
         <main className="flex-1 overflow-auto p-4 sm:p-6">
           <Outlet />

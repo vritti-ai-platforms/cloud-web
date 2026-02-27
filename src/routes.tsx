@@ -117,7 +117,7 @@ export const cloudRoutes: RouteObject[] = [
     ],
   },
   {
-    path: '/organization/:orgId',
+    path: '/:orgSlug',
     element: <OrgLayout />,
     children: [
       {

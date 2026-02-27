@@ -4,6 +4,7 @@ import { Button } from '@vritti/quantum-ui/Button';
 import { Card } from '@vritti/quantum-ui/Card';
 import { Skeleton } from '@vritti/quantum-ui/Skeleton';
 import { Typography } from '@vritti/quantum-ui/Typography';
+import { buildSlug } from '@vritti/quantum-ui/utils/slug';
 import { AppWindow, ArrowRight, Building2, Users } from 'lucide-react';
 import type React from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -107,7 +108,7 @@ export const OrgCard: React.FC<{ org: OrgListItem }> = ({ org }) => {
         <Button
           variant="link"
           className="p-0 h-auto text-primary text-sm gap-1"
-          onClick={() => navigate(`/organization/${org.id}/overview`)}
+          onClick={() => navigate(`/${buildSlug(org.name, org.id)}/overview`)}
         >
           View <ArrowRight className="h-3.5 w-3.5" />
         </Button>
