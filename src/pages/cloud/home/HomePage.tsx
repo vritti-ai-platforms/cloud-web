@@ -56,7 +56,7 @@ export const HomePage: React.FC = () => {
             size="sm"
             className="px-0"
             endAdornment={<ArrowRight />}
-            onClick={() => navigate('/organizations')}
+            onClick={() => navigate('/my-organizations')}
           >
             View all {data.total} organizations
           </Button>

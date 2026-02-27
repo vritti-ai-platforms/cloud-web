@@ -60,7 +60,7 @@ export const CompanySwitcher = ({ currentOrgId, currentOrgName }: CompanySwitche
               className="w-full justify-start h-auto px-2 py-1.5 text-sm font-normal"
               onClick={() => navigate('/organizations')}
             >
-              All Organizations
+              My Organizations
             </Button>
           </div>
           <Separator />

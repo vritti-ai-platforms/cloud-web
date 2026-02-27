@@ -95,7 +95,7 @@ export const cloudRoutes: RouteObject[] = [
         element: <HomePage />,
       },
       {
-        path: 'organizations',
+        path: 'my-organizations',
         element: <OrganizationsPage />,
       },
       {
