@@ -1,6 +1,6 @@
 import { useRoutes } from 'react-router-dom';
 import { useAuth } from '../providers/AuthProvider';
-import { adminRoutes, authenticatedRoutes, cloudRoutes } from '../routes';
+import { adminRoutes, cloudRoutes, publicRoutes } from '../routes';
 
 const getSubdomain = (): string => {
   const hostname = window.location.hostname;
@@ -10,7 +10,7 @@ const getSubdomain = (): string => {
 
 const getRoutes = (isAuthenticated: boolean) => {
   const subdomain = getSubdomain();
-  if (isAuthenticated) return authenticatedRoutes;
+  if (!isAuthenticated) return publicRoutes;
   switch (subdomain) {
     case 'cloud':
       return cloudRoutes;

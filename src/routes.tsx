@@ -19,7 +19,7 @@ import { SecurityPage } from './pages/cloud/settings/SecurityPage';
 import { OnboardingPage } from './pages/onboarding/OnboardingPage';
 
 // Routes shown when the user is not authenticated
-export const cloudRoutes: RouteObject[] = [
+export const publicRoutes: RouteObject[] = [
   {
     path: '/',
     element: <AuthLayout />,
@@ -82,7 +82,7 @@ export const adminRoutes: RouteObject[] = [
 ];
 
 // Routes shown when the user is authenticated
-export const authenticatedRoutes: RouteObject[] = [
+export const cloudRoutes: RouteObject[] = [
   {
     path: '/',
     element: <AppLayout />,
