@@ -1,9 +1,18 @@
 import { useMemo, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Cloud, MoreVertical, Plus, Search, Trash2, X } from 'lucide-react';
+import { Cloud, MoreVertical, Plus, Search, Trash2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { Badge } from '@vritti/quantum-ui/Badge';
 import { Button } from '@vritti/quantum-ui/Button';
+import {
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogRoot,
+  DialogTitle,
+} from '@vritti/quantum-ui/Dialog';
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -18,7 +27,7 @@ import { useCloudProviders, useCreateCloudProvider, useDeleteCloudProvider } fro
 
 export const CloudProvidersPage = () => {
   const [search, setSearch] = useState('');
-  const [showAddForm, setShowAddForm] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const { data: providers = [], isLoading } = useCloudProviders();
   const deleteMutation = useDeleteCloudProvider();
@@ -30,7 +39,7 @@ export const CloudProvidersPage = () => {
 
   const createMutation = useCreateCloudProvider({
     onSuccess: () => {
-      setShowAddForm(false);
+      setDialogOpen(false);
       form.reset();
     },
   });
@@ -46,9 +55,9 @@ export const CloudProvidersPage = () => {
     [providers, search],
   );
 
-  // Hide form and reset state on cancel
+  // Hide dialog and reset state on cancel
   const handleCancel = () => {
-    setShowAddForm(false);
+    setDialogOpen(false);
     form.reset();
   };
 
@@ -60,39 +69,48 @@ export const CloudProvidersPage = () => {
           <h2 className="text-foreground text-base font-medium">Cloud Providers</h2>
           <p className="text-muted-foreground text-sm">Manage cloud infrastructure providers</p>
         </div>
-        {!showAddForm && (
-          <Button size="sm" onClick={() => setShowAddForm(true)}>
-            <Plus className="size-4" />
-            Add Provider
-          </Button>
-        )}
+        <Button size="sm" onClick={() => setDialogOpen(true)}>
+          <Plus className="size-4" />
+          Add Provider
+        </Button>
       </div>
 
-      {/* Inline add form — shown when Add Provider is clicked */}
-      {showAddForm && (
-        <div className="bg-card border-primary/30 flex flex-col gap-4 rounded-2xl border p-6">
-          <p className="text-foreground text-sm font-medium">New Cloud Provider</p>
+      {/* Add Provider dialog */}
+      <DialogRoot open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add Cloud Provider</DialogTitle>
+            <DialogDescription>
+              Enter a name and a short code for the new cloud provider.
+            </DialogDescription>
+          </DialogHeader>
           <Form form={form} mutation={createMutation} showRootError>
-            <div className="flex items-end gap-4">
-              <div className="flex-1">
-                <TextField name="name" label="Provider Name" placeholder="e.g. Amazon Web Services" />
-              </div>
-              <div className="w-32">
-                <TextField name="code" label="Code" placeholder="e.g. AWS" />
-              </div>
-              <div className="flex shrink-0 gap-2 pb-1">
-                <Button type="submit" size="sm" disabled={createMutation.isPending}>
-                  {createMutation.isPending ? <Spinner className="size-4" /> : <Plus className="size-4" />}
-                  Add
-                </Button>
-                <Button type="button" variant="ghost" size="icon" onClick={handleCancel}>
-                  <X className="size-4" />
-                </Button>
-              </div>
+            <div className="flex flex-col gap-4">
+              <TextField
+                name="name"
+                label="Provider Name"
+                placeholder="e.g. Amazon Web Services"
+              />
+              <TextField
+                name="code"
+                label="Code"
+                placeholder="e.g. AWS"
+                description="Short identifier used across the platform"
+              />
             </div>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button type="button" variant="outline" onClick={handleCancel}>
+                  Cancel
+                </Button>
+              </DialogClose>
+              <Button type="submit" loadingText="Adding...">
+                Add Provider
+              </Button>
+            </DialogFooter>
           </Form>
-        </div>
-      )}
+        </DialogContent>
+      </DialogRoot>
 
       {/* Search */}
       <div className="relative w-96">
