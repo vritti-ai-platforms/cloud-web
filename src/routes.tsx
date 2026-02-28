@@ -1,6 +1,7 @@
 import { OnboardingProvider } from '@context/onboarding';
 import type { RouteObject } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
+import { AdminLayout } from './components/layouts/AdminLayout';
 import { AppLayout } from './components/layouts/AppLayout';
 import { AuthLayout } from './components/layouts/AuthLayout';
 import { OrgLayout } from './components/layouts/OrgLayout';
@@ -71,15 +72,11 @@ export const publicRoutes: RouteObject[] = [
 export const adminRoutes: RouteObject[] = [
   {
     path: '/',
-    element: <AppLayout />,
+    element: <AdminLayout />,
     children: [
       {
         index: true,
-        element: <Navigate to="home" replace />,
-      },
-      {
-        path: 'home',
-        element: <>Hello</>,
+        element: <Navigate to="cloud-providers" replace />,
       },
       {
         path: 'cloud-providers',

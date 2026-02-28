@@ -1,9 +1,9 @@
+import { useLogout } from '@hooks/auth';
 import { Avatar, AvatarFallback, AvatarImage } from '@vritti/quantum-ui/Avatar';
 import { DropdownMenu, type MenuItem } from '@vritti/quantum-ui/DropdownMenu';
 import { ThemeToggle, useTheme } from '@vritti/quantum-ui/theme';
 import { Lock, LogOut, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useLogout } from '@hooks/auth';
 import { useAuth } from '../../providers/AuthProvider';
 
 export const UserMenu = () => {

@@ -1,7 +1,5 @@
-import { useMemo, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Cloud, MoreVertical, Plus, Search, Trash2 } from 'lucide-react';
-import { useForm } from 'react-hook-form';
+import { useCloudProviders, useCreateCloudProvider, useDeleteCloudProvider } from '@hooks/admin/cloud-providers';
 import { Badge } from '@vritti/quantum-ui/Badge';
 import { Button } from '@vritti/quantum-ui/Button';
 import {
@@ -22,8 +20,10 @@ import {
 import { Form } from '@vritti/quantum-ui/Form';
 import { Spinner } from '@vritti/quantum-ui/Spinner';
 import { TextField } from '@vritti/quantum-ui/TextField';
+import { Cloud, MoreVertical, Plus, Search, Trash2 } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { type CreateCloudProviderData, createCloudProviderSchema } from '@/schemas/admin/cloud-providers';
-import { useCloudProviders, useCreateCloudProvider, useDeleteCloudProvider } from '@hooks/admin/cloud-providers';
 
 export const CloudProvidersPage = () => {
   const [search, setSearch] = useState('');
@@ -49,8 +49,7 @@ export const CloudProvidersPage = () => {
     () =>
       providers.filter(
         (p) =>
-          p.name.toLowerCase().includes(search.toLowerCase()) ||
-          p.code.toLowerCase().includes(search.toLowerCase()),
+          p.name.toLowerCase().includes(search.toLowerCase()) || p.code.toLowerCase().includes(search.toLowerCase()),
       ),
     [providers, search],
   );
@@ -80,17 +79,11 @@ export const CloudProvidersPage = () => {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Add Cloud Provider</DialogTitle>
-            <DialogDescription>
-              Enter a name and a short code for the new cloud provider.
-            </DialogDescription>
+            <DialogDescription>Enter a name and a short code for the new cloud provider.</DialogDescription>
           </DialogHeader>
           <Form form={form} mutation={createMutation} showRootError>
             <div className="flex flex-col gap-4">
-              <TextField
-                name="name"
-                label="Provider Name"
-                placeholder="e.g. Amazon Web Services"
-              />
+              <TextField name="name" label="Provider Name" placeholder="e.g. Amazon Web Services" />
               <TextField
                 name="code"
                 label="Code"
