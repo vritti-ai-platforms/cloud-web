@@ -1,7 +1,7 @@
 import { Breadcrumb } from '@vritti/quantum-ui/Breadcrumb';
 import { Button } from '@vritti/quantum-ui/Button';
 import { Bell, ChevronRight, Sparkles } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import logoImg from '../../assets/vritti-cloud.png';
 import { CompanySwitcher } from '../company-switcher';
 import { UserMenu } from './UserMenu';
@@ -10,6 +10,9 @@ import { UserMenu } from './UserMenu';
 const ORG_SLUG_PREFIX = 'org-';
 
 export const TopBar = () => {
+  const { pathname } = useLocation();
+  const showBreadcrumb = pathname !== '/';
+
   return (
     <div className="fixed top-0 left-0 right-0 z-50 bg-background/60 backdrop-blur-sm border-b border-border min-w-[280px]">
       <div className="h-14 px-6 flex items-center justify-between">
@@ -18,11 +21,11 @@ export const TopBar = () => {
           <img src={logoImg} alt="Vritti Logo" className="h-8" />
         </Link>
 
-        <ChevronRight className="size-4 text-muted-foreground shrink-0 mx-2" />
+        {showBreadcrumb && <ChevronRight className="size-4 text-muted-foreground shrink-0 mx-2" />}
 
         {/* Breadcrumb */}
         <div className="flex-1">
-          <Breadcrumb
+          {showBreadcrumb && <Breadcrumb
             maxItems={4}
             renderSegment={(segment) => {
               // First-level segment with org- prefix = org slug
@@ -36,7 +39,7 @@ export const TopBar = () => {
               }
               return undefined;
             }}
-          />
+          />}
         </div>
 
         {/* Right Actions */}
