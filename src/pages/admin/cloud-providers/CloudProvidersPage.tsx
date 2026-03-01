@@ -12,12 +12,7 @@ import {
   type SearchState,
 } from '@vritti/quantum-ui/DataTable';
 import { Dialog } from '@vritti/quantum-ui/Dialog';
-import {
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuRoot,
-  DropdownMenuTrigger,
-} from '@vritti/quantum-ui/DropdownMenu';
+import { DropdownMenu } from '@vritti/quantum-ui/DropdownMenu';
 import { PageHeader } from '@vritti/quantum-ui/PageHeader';
 import { ValueFilter } from '@vritti/quantum-ui/ValueFilter';
 import { Cloud, MoreVertical, Plus, Trash2 } from 'lucide-react';
@@ -62,6 +57,8 @@ export const CloudProvidersPage = () => {
   const deleteMutation = useDeleteCloudProvider();
 
   const columns = useMemo<ColumnDef<CloudProvider, unknown>[]>(
+    // depend only on the stable mutate fn, not the whole mutation object
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     () => [
       {
         accessorKey: 'name',
@@ -89,28 +86,32 @@ export const CloudProvidersPage = () => {
         id: 'actions',
         header: '',
         cell: ({ row }) => (
-          <DropdownMenuRoot>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="size-7">
-                <MoreVertical className="size-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem
-                className="text-destructive focus:text-destructive"
-                onClick={() => deleteMutation.mutate(row.original.id)}
-              >
-                <Trash2 className="mr-2 size-4" />
-                Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenuRoot>
+          <DropdownMenu
+            trigger={{
+              children: (
+                <Button variant="ghost" size="icon" className="size-7">
+                  <MoreVertical className="size-4" />
+                </Button>
+              ),
+            }}
+            align="end"
+            items={[
+              {
+                type: 'item',
+                id: 'delete',
+                label: 'Delete',
+                icon: Trash2,
+                variant: 'destructive',
+                onClick: () => deleteMutation.mutate(row.original.id),
+              },
+            ]}
+          />
         ),
         enableSorting: false,
         enableHiding: false,
       },
     ],
-    [deleteMutation],
+    [deleteMutation.mutate],
   );
 
   // Invalidate the cloud providers GET query after any state change
