@@ -2,39 +2,50 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@vritti/quantum-ui/Button';
 import { PageHeader } from '@vritti/quantum-ui/PageHeader';
 import { type StepDef, StepProgressIndicator } from '@vritti/quantum-ui/StepProgressIndicator';
-import { Building2, ClipboardList, CreditCard } from 'lucide-react';
+import { Building2, ClipboardList, CreditCard, Server } from 'lucide-react';
 import type React from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useCreateOrganization } from '@/hooks/cloud/organizations';
 import type { CreateOrgFormData } from '@/schemas/cloud/organizations';
-import { createOrganizationSchema, OrgPlan } from '@/schemas/cloud/organizations';
+import { createOrganizationSchema } from '@/schemas/cloud/organizations';
+import type { PlanOption } from '@/services/cloud/infrastructure.service';
 import { BasicInfoStep } from './steps/BasicInfoStep';
 import { ChoosePlanStep } from './steps/ChoosePlanStep';
+import { InfrastructureStep } from './steps/InfrastructureStep';
 import { ReviewStep } from './steps/ReviewStep';
 
 const CREATE_ORG_STEPS: StepDef[] = [
   { label: 'Basic Info', icon: <Building2 className="h-4 w-4" /> },
+  { label: 'Infrastructure', icon: <Server className="h-4 w-4" /> },
   { label: 'Choose Plan', icon: <CreditCard className="h-4 w-4" /> },
   { label: 'Review', icon: <ClipboardList className="h-4 w-4" /> },
 ];
 
 export const CreateOrganizationPage: React.FC = () => {
   const navigate = useNavigate();
-  const [step, setStep] = useState<1 | 2 | 3>(1);
+  const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
 
   const form = useForm<CreateOrgFormData>({
     resolver: zodResolver(createOrganizationSchema),
-    defaultValues: { plan: OrgPlan.free },
+    defaultValues: {},
   });
 
   const createMutation = useCreateOrganization({
     onSuccess: () => navigate('/'),
   });
 
-  const selectedPlan = form.watch('plan') ?? OrgPlan.free;
+  const selectedPlanId = form.watch('planId');
+
+  // Stores selected plan data into form fields
+  const handleSelectPlan = (plan: PlanOption) => {
+    form.setValue('planId', plan.id);
+    form.setValue('planName', plan.name);
+    form.setValue('planPrice', plan.price ?? undefined);
+    form.setValue('planCurrency', plan.currency ?? undefined);
+  };
 
   return (
     <div className="max-w-5xl mx-auto">
@@ -60,26 +71,28 @@ export const CreateOrganizationPage: React.FC = () => {
       <div className="px-6 py-6 space-y-6">
         {step === 1 && <BasicInfoStep form={form} onContinue={() => setStep(2)} />}
 
-        {step === 2 && (
+        {step === 2 && <InfrastructureStep form={form} onBack={() => setStep(1)} onContinue={() => setStep(3)} />}
+
+        {step === 3 && (
           <ChoosePlanStep
             form={form}
-            selectedPlan={selectedPlan}
-            onSelect={(plan) => form.setValue('plan', plan)}
-            onBack={() => setStep(1)}
-            onContinue={() => setStep(3)}
+            selectedPlanId={selectedPlanId}
+            onSelect={handleSelectPlan}
+            onBack={() => setStep(2)}
+            onContinue={() => setStep(4)}
           />
         )}
 
-        {step === 3 && (
+        {step === 4 && (
           <ReviewStep
             form={form}
-            selectedPlan={selectedPlan}
             agreedToTerms={agreedToTerms}
             onAgreedToTermsChange={(c) => setAgreedToTerms(c)}
             createMutation={createMutation}
-            onBack={() => setStep(2)}
+            onBack={() => setStep(3)}
             onEditBasicInfo={() => setStep(1)}
-            onChangePlan={() => setStep(2)}
+            onChangeInfrastructure={() => setStep(2)}
+            onChangePlan={() => setStep(3)}
           />
         )}
       </div>

@@ -116,7 +116,10 @@ const QRVerificationInner: React.FC<QRVerificationStepProps & { onRetry: () => v
           <div className="space-y-4">
             <div className="flex justify-center">
               <div className="p-4 bg-white rounded-lg">
-                <QRCodeSVG value={buildQrUrl(method, initiatedData.verificationCode, initiatedData.recipientNumber)} size={180} />
+                <QRCodeSVG
+                  value={buildQrUrl(method, initiatedData.verificationCode, initiatedData.recipientNumber)}
+                  size={180}
+                />
               </div>
             </div>
 
@@ -130,7 +133,9 @@ const QRVerificationInner: React.FC<QRVerificationStepProps & { onRetry: () => v
               {initiatedData.recipientNumber && (
                 <Typography variant="body2" align="center" intent="muted">
                   Send to {method === 'whatsapp' ? 'WhatsApp' : 'SMS'} number{' '}
-                  <span className="font-medium text-foreground">{formatWhatsAppNumber(initiatedData.recipientNumber)}</span>
+                  <span className="font-medium text-foreground">
+                    {formatWhatsAppNumber(initiatedData.recipientNumber)}
+                  </span>
                 </Typography>
               )}
             </div>
@@ -193,7 +198,11 @@ const QRVerificationInner: React.FC<QRVerificationStepProps & { onRetry: () => v
             <Typography variant="h4" align="center" className="text-foreground">
               Verification Expired
             </Typography>
-            <Alert variant="warning" title="Time's up" description={(data as VerificationEventMap['expired']).message} />
+            <Alert
+              variant="warning"
+              title="Time's up"
+              description={(data as VerificationEventMap['expired']).message}
+            />
           </div>
           <Button onClick={onRetry} className="w-full">
             Try Again

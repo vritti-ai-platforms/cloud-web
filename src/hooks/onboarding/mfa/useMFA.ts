@@ -10,7 +10,10 @@ import type { AxiosError } from 'axios';
 
 type UseInitiateTotpSetupOptions = Omit<UseMutationOptions<TotpSetupResponse, AxiosError, void>, 'mutationFn'>;
 type UseVerifyTotpSetupOptions = Omit<UseMutationOptions<BackupCodesResponse, AxiosError, string>, 'mutationFn'>;
-type UseSkipMFASetupOptions = Omit<UseMutationOptions<{ success: boolean; message: string }, AxiosError, void>, 'mutationFn'>;
+type UseSkipMFASetupOptions = Omit<
+  UseMutationOptions<{ success: boolean; message: string }, AxiosError, void>,
+  'mutationFn'
+>;
 
 export function useInitiateTotpSetup(options?: UseInitiateTotpSetupOptions) {
   return useMutation<TotpSetupResponse, AxiosError, void>({
@@ -32,4 +35,3 @@ export function useSkipMFASetup(options?: UseSkipMFASetupOptions) {
     ...options,
   });
 }
-

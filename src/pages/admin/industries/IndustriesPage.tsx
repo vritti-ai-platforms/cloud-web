@@ -17,12 +17,10 @@ const TABLE_SLUG = 'industries';
 export const IndustriesPage = () => {
   const queryClient = useQueryClient();
   const { data: response, isLoading } = useIndustries();
-  const industries = response?.data ?? [];
 
   const deleteMutation = useDeleteIndustry();
 
   const { table } = useDataTable({
-    data: industries,
     columns: getColumns(deleteMutation.mutate),
     slug: TABLE_SLUG,
     label: 'industry',
@@ -30,7 +28,7 @@ export const IndustriesPage = () => {
     enableRowSelection: false,
     enableSorting: true,
     enableMultiSort: false,
-    onStateApplied: () => queryClient.invalidateQueries({ queryKey: INDUSTRIES_QUERY_KEY }),
+    onStatePush: () => queryClient.invalidateQueries({ queryKey: INDUSTRIES_QUERY_KEY }),
   });
 
   return (
@@ -42,7 +40,7 @@ export const IndustriesPage = () => {
       <DataTable
         table={table}
         isLoading={isLoading}
-        onStateApplied={() => queryClient.invalidateQueries({ queryKey: INDUSTRIES_QUERY_KEY })}
+        onStatePush={() => queryClient.invalidateQueries({ queryKey: INDUSTRIES_QUERY_KEY })}
         filters={[
           <ValueFilter key="name" name="name" label="Name" fieldType="string" />,
           <ValueFilter key="code" name="code" label="Code" fieldType="string" />,

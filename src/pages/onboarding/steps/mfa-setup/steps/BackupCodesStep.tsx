@@ -12,11 +12,7 @@ interface BackupCodesStepProps {
 }
 
 // Displays backup codes with copy functionality after MFA setup
-export const BackupCodesStep: React.FC<BackupCodesStepProps> = ({
-  backupCodes,
-  warning,
-  onContinue,
-}) => {
+export const BackupCodesStep: React.FC<BackupCodesStepProps> = ({ backupCodes, warning, onContinue }) => {
   const [copiedAll, setCopiedAll] = useState(false);
 
   // Copies all backup codes to clipboard

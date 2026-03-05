@@ -30,7 +30,12 @@ export const SuccessStep: React.FC<SuccessStepProps> = ({ hasMfa, onContinue, is
         </Typography>
       </div>
 
-      <Button onClick={onContinue} isLoading={isPending} disabled={isPending} className="w-full bg-primary text-primary-foreground">
+      <Button
+        onClick={onContinue}
+        isLoading={isPending}
+        disabled={isPending}
+        className="w-full bg-primary text-primary-foreground"
+      >
         Continue
       </Button>
 

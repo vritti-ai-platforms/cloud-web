@@ -6,23 +6,23 @@ import { Button } from '@vritti/quantum-ui/Button';
 import { type ColumnDef, DataTable, useDataTable } from '@vritti/quantum-ui/DataTable';
 import { Dialog } from '@vritti/quantum-ui/Dialog';
 import { DropdownMenu } from '@vritti/quantum-ui/DropdownMenu';
+import { useDialog, useTheme } from '@vritti/quantum-ui/hooks';
 import { PageHeader } from '@vritti/quantum-ui/PageHeader';
-import { ValueFilter } from '@vritti/quantum-ui/ValueFilter';
-import { Cloud, MoreVertical, Plus, Trash2 } from 'lucide-react';
+import { Cloud, MoreVertical, Pencil, Plus, Trash2 } from 'lucide-react';
 import type { CloudProvider } from '@/schemas/admin/cloud-providers';
 import { AddCloudProviderForm } from './forms/AddCloudProviderForm';
+import { EditCloudProviderForm } from './forms/EditCloudProviderForm';
 
 const TABLE_SLUG = 'cloud-providers';
 
 export const CloudProvidersPage = () => {
   const queryClient = useQueryClient();
   const { data: response, isLoading } = useCloudProviders();
-  const providers = response?.data ?? [];
 
   const deleteMutation = useDeleteCloudProvider();
+  const addDialog = useDialog();
 
   const { table } = useDataTable({
-    data: providers,
     columns: getColumns(deleteMutation.mutate),
     slug: TABLE_SLUG,
     label: 'provider',
@@ -30,7 +30,7 @@ export const CloudProvidersPage = () => {
     enableRowSelection: false,
     enableSorting: true,
     enableMultiSort: false,
-    onStateApplied: () => queryClient.invalidateQueries({ queryKey: CLOUD_PROVIDERS_QUERY_KEY }),
+    onStatePush: () => queryClient.invalidateQueries({ queryKey: CLOUD_PROVIDERS_QUERY_KEY }),
   });
 
   return (
@@ -42,24 +42,20 @@ export const CloudProvidersPage = () => {
       <DataTable
         table={table}
         isLoading={isLoading}
-        onStateApplied={() => queryClient.invalidateQueries({ queryKey: CLOUD_PROVIDERS_QUERY_KEY })}
-        filters={[
-          <ValueFilter key="name" name="name" label="Name" fieldType="string" />,
-          <ValueFilter key="code" name="code" label="Code" fieldType="string" />,
-          <ValueFilter key="regionCount" name="regionCount" label="Regions" fieldType="number" />,
-        ]}
+        enableViews={false}
+        searchConfig={{
+          columns: [
+            { id: 'name', label: 'Provider' },
+            { id: 'code', label: 'Code' },
+          ],
+          searchAll: true,
+        }}
+        onStatePush={() => queryClient.invalidateQueries({ queryKey: CLOUD_PROVIDERS_QUERY_KEY })}
         toolbarActions={{
           actions: (
-            <Dialog
-              title="Add Cloud Provider"
-              description="Enter a name and a short code for the new cloud provider."
-              anchor={(open) => (
-                <Button startAdornment={<Plus className="size-4" />} size="sm" onClick={open}>
-                  Add Provider
-                </Button>
-              )}
-              content={(close) => <AddCloudProviderForm onSuccess={close} onCancel={close} />}
-            />
+            <Button startAdornment={<Plus className="size-4" />} size="sm" onClick={addDialog.open}>
+              Add Provider
+            </Button>
           ),
         }}
         emptyStateConfig={{
@@ -67,22 +63,32 @@ export const CloudProvidersPage = () => {
           title: 'No providers found',
           description: 'Add your first cloud provider to get started.',
           action: (
-            <Dialog
-              title="Add Cloud Provider"
-              description="Enter a name and a short code for the new cloud provider."
-              anchor={(open) => (
-                <Button size="sm" onClick={open}>
-                  <Plus className="size-4" />
-                  Add Provider
-                </Button>
-              )}
-              content={(close) => <AddCloudProviderForm onSuccess={close} onCancel={close} />}
-            />
+            <Button startAdornment={<Plus className="size-4" />} size="sm" onClick={addDialog.open}>
+              Add Provider
+            </Button>
           ),
         }}
       />
+
+      <Dialog
+        open={addDialog.isOpen}
+        onOpenChange={(v) => {
+          if (!v) addDialog.close();
+        }}
+        title="Add Cloud Provider"
+        description="Enter the details for the new cloud provider."
+        content={(close) => <AddCloudProviderForm onSuccess={close} onCancel={close} />}
+      />
     </div>
   );
+};
+
+const ProviderLogo = ({ provider }: { provider: CloudProvider }) => {
+  const { theme } = useTheme();
+  const src = theme === 'dark' ? provider.logoDarkUrl : provider.logoUrl;
+
+  if (!src) return null;
+  return <img src={src} alt={provider.name} className="size-5 object-contain shrink-0" />;
 };
 
 function getColumns(onDelete: (id: string) => void): ColumnDef<CloudProvider, unknown>[] {
@@ -90,6 +96,12 @@ function getColumns(onDelete: (id: string) => void): ColumnDef<CloudProvider, un
     {
       accessorKey: 'name',
       header: 'Provider',
+      cell: ({ row }) => (
+        <div className="flex items-center gap-2">
+          <ProviderLogo provider={row.original} />
+          <span>{row.original.name}</span>
+        </div>
+      ),
     },
     {
       accessorKey: 'code',
@@ -105,7 +117,7 @@ function getColumns(onDelete: (id: string) => void): ColumnDef<CloudProvider, un
       header: 'Regions',
     },
     {
-      id: 'deployments',
+      accessorKey: 'deploymentCount',
       header: 'Deployments',
     },
     {
@@ -122,6 +134,19 @@ function getColumns(onDelete: (id: string) => void): ColumnDef<CloudProvider, un
           }}
           align="end"
           items={[
+            {
+              type: 'dialog' as const,
+              id: 'edit',
+              label: 'Edit',
+              icon: Pencil,
+              dialog: {
+                title: 'Edit Cloud Provider',
+                description: 'Update the details for this cloud provider.',
+                content: (close) => (
+                  <EditCloudProviderForm provider={row.original} onSuccess={close} onCancel={close} />
+                ),
+              },
+            },
             {
               type: 'item',
               id: 'delete',

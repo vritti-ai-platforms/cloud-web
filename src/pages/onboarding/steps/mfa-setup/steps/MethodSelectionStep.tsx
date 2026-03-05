@@ -13,10 +13,7 @@ interface MethodSelectionStepProps {
 }
 
 // MFA method selection — clicking a card navigates directly to setup
-export const MethodSelectionStep: React.FC<MethodSelectionStepProps> = ({
-  onMethodSelect,
-  onSuccess,
-}) => {
+export const MethodSelectionStep: React.FC<MethodSelectionStepProps> = ({ onMethodSelect, onSuccess }) => {
   const skipMutation = useSkipMFASetup({ onSuccess });
   const error = skipMutation.error?.message || null;
   const methods = [
@@ -46,11 +43,7 @@ export const MethodSelectionStep: React.FC<MethodSelectionStepProps> = ({
         </Typography>
       </div>
 
-      {error && (
-        <div className="p-3 rounded-lg bg-destructive/10 text-destructive text-sm text-center">
-          {error}
-        </div>
-      )}
+      {error && <div className="p-3 rounded-lg bg-destructive/10 text-destructive text-sm text-center">{error}</div>}
 
       <div className="space-y-3">
         {methods.map((method) => (
@@ -69,7 +62,11 @@ export const MethodSelectionStep: React.FC<MethodSelectionStepProps> = ({
                 <Typography variant="body1" className="font-medium text-foreground truncate">
                   {method.title}
                 </Typography>
-                {method.badge && <Badge variant="default" className="shrink-0">{method.badge}</Badge>}
+                {method.badge && (
+                  <Badge variant="default" className="shrink-0">
+                    {method.badge}
+                  </Badge>
+                )}
               </div>
               <Typography variant="body2" intent="muted" className="text-wrap">
                 {method.description}

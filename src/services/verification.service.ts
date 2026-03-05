@@ -65,7 +65,9 @@ export interface RevertChangeResponse {
 export const verificationService = {
   // Email Flow
   requestEmailIdentityVerification: (): Promise<IdentityVerificationResponse> =>
-    axios.post<IdentityVerificationResponse>('/cloud-api/users/contact/email/request-identity-verification').then((r) => r.data),
+    axios
+      .post<IdentityVerificationResponse>('/cloud-api/users/contact/email/request-identity-verification')
+      .then((r) => r.data),
 
   verifyEmailIdentity: (data: VerifyIdentityRequest): Promise<VerifyIdentityResponse> =>
     axios.post<VerifyIdentityResponse>('/cloud-api/users/contact/email/verify-identity', data).then((r) => r.data),
@@ -84,7 +86,9 @@ export const verificationService = {
 
   // Phone Flow
   requestPhoneIdentityVerification: (): Promise<IdentityVerificationResponse> =>
-    axios.post<IdentityVerificationResponse>('/cloud-api/users/contact/phone/request-identity-verification').then((r) => r.data),
+    axios
+      .post<IdentityVerificationResponse>('/cloud-api/users/contact/phone/request-identity-verification')
+      .then((r) => r.data),
 
   verifyPhoneIdentity: (data: VerifyIdentityRequest): Promise<VerifyIdentityResponse> =>
     axios.post<VerifyIdentityResponse>('/cloud-api/users/contact/phone/verify-identity', data).then((r) => r.data),

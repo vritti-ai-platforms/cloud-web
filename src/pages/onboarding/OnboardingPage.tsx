@@ -1,8 +1,8 @@
 import { MultiStepProgressIndicator } from '@components/onboarding/MultiStepProgressIndicator';
 import { useOnboarding } from '@context/onboarding';
+import { useCompleteOnboarding } from '@hooks/onboarding';
 import { scheduleTokenRefresh, setToken } from '@vritti/quantum-ui/axios';
 import { Spinner } from '@vritti/quantum-ui/Spinner';
-import { useCompleteOnboarding } from '@hooks/onboarding';
 import type React from 'react';
 import { Navigate } from 'react-router-dom';
 import { MFASetupStep } from './steps/mfa-setup';

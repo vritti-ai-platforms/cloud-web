@@ -1,0 +1,192 @@
+import { useDeleteDeployment, useDeployments } from '@hooks/admin/deployments';
+import { Badge } from '@vritti/quantum-ui/Badge';
+import { Button } from '@vritti/quantum-ui/Button';
+import { type ColumnDef, DataTable, useDataTable } from '@vritti/quantum-ui/DataTable';
+import { Dialog } from '@vritti/quantum-ui/Dialog';
+import { DropdownMenu } from '@vritti/quantum-ui/DropdownMenu';
+import { PageHeader } from '@vritti/quantum-ui/PageHeader';
+import { buildSlug } from '@vritti/quantum-ui/utils/slug';
+import { Eye, MoreVertical, Pencil, Plus, Server, Trash2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import type { Deployment } from '@/schemas/admin/deployments';
+import { AddDeploymentForm } from './forms/AddDeploymentForm';
+import { EditDeploymentForm } from './forms/EditDeploymentForm';
+
+const TABLE_SLUG = 'deployments';
+
+export const DeploymentsPage = () => {
+  const navigate = useNavigate();
+  const { data: response, isLoading } = useDeployments();
+  const deleteMutation = useDeleteDeployment();
+
+  const { table } = useDataTable({
+    columns: getColumns({
+      onView: (d) => navigate(`/deployments/${buildSlug(d.name, d.id)}`),
+      onDelete: deleteMutation.mutate,
+    }),
+    slug: TABLE_SLUG,
+    label: 'deployment',
+    serverState: response,
+    enableRowSelection: false,
+    enableSorting: true,
+    enableMultiSort: false,
+  });
+
+  return (
+    <div className="flex flex-col gap-6">
+      <PageHeader title="Deployments" description="Manage infrastructure deployments" />
+
+      <DataTable
+        table={table}
+        isLoading={isLoading}
+        toolbarActions={{
+          actions: (
+            <Dialog
+              title="Add Deployment"
+              description="Configure a new deployment environment."
+              anchor={(open) => (
+                <Button startAdornment={<Plus className="size-4" />} size="sm" onClick={open}>
+                  Add Deployment
+                </Button>
+              )}
+              content={(close) => <AddDeploymentForm onSuccess={close} onCancel={close} />}
+            />
+          ),
+        }}
+        emptyStateConfig={{
+          icon: Server,
+          title: 'No deployments found',
+          description: 'Add your first deployment to get started.',
+          action: (
+            <Dialog
+              title="Add Deployment"
+              description="Configure a new deployment environment."
+              anchor={(open) => (
+                <Button size="sm" onClick={open}>
+                  <Plus className="size-4" />
+                  Add Deployment
+                </Button>
+              )}
+              content={(close) => <AddDeploymentForm onSuccess={close} onCancel={close} />}
+            />
+          ),
+        }}
+      />
+    </div>
+  );
+};
+
+interface ColumnActions {
+  onView: (deployment: Deployment) => void;
+  onDelete: (id: string) => void;
+}
+
+function getColumns({ onView, onDelete }: ColumnActions): ColumnDef<Deployment, unknown>[] {
+  return [
+    {
+      accessorKey: 'name',
+      header: 'Name',
+    },
+    {
+      accessorKey: 'regionName',
+      header: 'Region',
+      cell: ({ row }) => (
+        <span className="text-sm">
+          {row.original.regionName ?? '—'}
+          {row.original.regionCode && (
+            <span className="ml-1 text-muted-foreground font-mono text-xs">({row.original.regionCode})</span>
+          )}
+        </span>
+      ),
+    },
+    {
+      accessorKey: 'cloudProviderName',
+      header: 'Cloud Provider',
+      cell: ({ row }) => (
+        <span className="text-sm">
+          {row.original.cloudProviderName ?? '—'}
+          {row.original.cloudProviderCode && (
+            <span className="ml-1 text-muted-foreground font-mono text-xs">({row.original.cloudProviderCode})</span>
+          )}
+        </span>
+      ),
+    },
+    {
+      accessorKey: 'status',
+      header: 'Status',
+      cell: ({ row }) => {
+        const status = row.original.status;
+        if (status === 'active') {
+          return <Badge className="bg-success/15 text-success border-success/30 capitalize">{status}</Badge>;
+        }
+        if (status === 'stopped') {
+          return (
+            <Badge variant="destructive" className="capitalize">
+              {status}
+            </Badge>
+          );
+        }
+        return (
+          <Badge variant="secondary" className="capitalize">
+            {status}
+          </Badge>
+        );
+      },
+    },
+    {
+      accessorKey: 'type',
+      header: 'Type',
+      cell: ({ row }) => (
+        <Badge variant="outline" className="capitalize">
+          {row.original.type}
+        </Badge>
+      ),
+    },
+    {
+      id: 'actions',
+      header: '',
+      cell: ({ row }) => (
+        <DropdownMenu
+          trigger={{
+            children: (
+              <Button variant="ghost" size="icon" className="size-7">
+                <MoreVertical className="size-4" />
+              </Button>
+            ),
+          }}
+          align="end"
+          items={[
+            {
+              type: 'item' as const,
+              id: 'view',
+              label: 'View',
+              icon: Eye,
+              onClick: () => onView(row.original),
+            },
+            {
+              type: 'dialog' as const,
+              id: 'edit',
+              label: 'Edit',
+              icon: Pencil,
+              dialog: {
+                title: 'Edit Deployment',
+                description: 'Update deployment configuration.',
+                content: (close) => <EditDeploymentForm deployment={row.original} onSuccess={close} onCancel={close} />,
+              },
+            },
+            {
+              type: 'item' as const,
+              id: 'delete',
+              label: 'Delete',
+              icon: Trash2,
+              variant: 'destructive',
+              onClick: () => onDelete(row.original.id),
+            },
+          ]}
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+  ];
+}

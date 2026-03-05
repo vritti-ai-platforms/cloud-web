@@ -92,7 +92,10 @@ export const SecurityPage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Page Header */}
-      <PageHeader title="Security Settings" description="Manage your password, authentication methods, and active sessions" />
+      <PageHeader
+        title="Security Settings"
+        description="Manage your password, authentication methods, and active sessions"
+      />
 
       {/* Change Password Card */}
       <Card>

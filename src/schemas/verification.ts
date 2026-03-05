@@ -12,10 +12,7 @@ export type OTPFormData = z.infer<typeof otpSchema>;
 
 // New email entry form validation
 export const newEmailSchema = z.object({
-  newEmail: z
-    .string()
-    .min(1, 'Email is required')
-    .email('Please enter a valid email address'),
+  newEmail: z.string().min(1, 'Email is required').email('Please enter a valid email address'),
 });
 
 export type NewEmailFormData = z.infer<typeof newEmailSchema>;

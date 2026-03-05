@@ -1,11 +1,5 @@
 import { z } from 'zod';
 
-export enum OrgPlan {
-  free = 'free',
-  pro = 'pro',
-  enterprise = 'enterprise',
-}
-
 export enum OrgSize {
   s0_10 = '0-10',
   s10_20 = '10-20',
@@ -28,7 +22,8 @@ export interface OrgListItem {
   industryId: string;
   size: OrgSize;
   mediaId: string | null;
-  plan: OrgPlan;
+  planId: string | null;
+  deploymentId: string | null;
   role: OrgMemberRole;
   createdAt: string;
   updatedAt: string | null;
@@ -50,16 +45,26 @@ export const createOrganizationSchema = z.object({
     .min(1, 'URL is required')
     .regex(/^[a-z0-9-]+$/, 'Only lowercase letters, numbers, and hyphens'),
   size: z.enum(Object.values(OrgSize) as [OrgSize, ...OrgSize[]], { message: 'Please select a size' }),
-  plan: z.enum(Object.values(OrgPlan) as [OrgPlan, ...OrgPlan[]]),
   industryId: z.string({ message: 'Please select an industry' }),
   industryName: z.string().optional(),
-  logo: z.instanceof(File).refine((f) => f.size <= 10 * 1024 * 1024, 'File must be under 10MB').optional(),
+  regionId: z.string({ message: 'Please select a region' }).optional(),
+  regionName: z.string().optional(),
+  cloudProviderId: z.string({ message: 'Please select a provider' }).optional(),
+  cloudProviderName: z.string().optional(),
+  deploymentId: z.string({ message: 'Please select a deployment' }).optional(),
+  deploymentName: z.string().optional(),
+  planId: z.string({ message: 'Please select a plan' }).optional(),
+  planName: z.string().optional(),
+  planPrice: z.string().optional(),
+  planCurrency: z.string().optional(),
+  logo: z
+    .instanceof(File)
+    .refine((f) => f.size <= 10 * 1024 * 1024, 'File must be under 10MB')
+    .optional(),
 });
 
-// Use output type so plan is always OrgPlan (never undefined) after .default()
 export type CreateOrgFormData = z.output<typeof createOrganizationSchema>;
 
 export interface SubdomainAvailability {
   available: boolean;
 }
-

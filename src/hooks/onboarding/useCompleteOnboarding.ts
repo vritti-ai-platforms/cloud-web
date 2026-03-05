@@ -1,6 +1,6 @@
+import { type CompleteOnboardingResponse, completeOnboarding } from '@services/onboarding.service';
 import { type UseMutationOptions, useMutation } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
-import { type CompleteOnboardingResponse, completeOnboarding } from '@services/onboarding.service';
 
 type UseCompleteOnboardingOptions = Omit<
   UseMutationOptions<CompleteOnboardingResponse, AxiosError, void>,

@@ -7,30 +7,38 @@ import { ArrowLeft, Check } from 'lucide-react';
 import type React from 'react';
 import type { UseFormReturn } from 'react-hook-form';
 import type { useCreateOrganization } from '@/hooks/cloud/organizations';
-import type { CreateOrgFormData, OrgPlan } from '@/schemas/cloud/organizations';
+import type { CreateOrgFormData } from '@/schemas/cloud/organizations';
 
 interface ReviewStepProps {
   form: UseFormReturn<CreateOrgFormData>;
-  selectedPlan: OrgPlan;
   agreedToTerms: boolean;
   onAgreedToTermsChange: (checked: boolean) => void;
   createMutation: ReturnType<typeof useCreateOrganization>;
   onBack: () => void;
   onEditBasicInfo: () => void;
+  onChangeInfrastructure: () => void;
   onChangePlan: () => void;
 }
 
 export const ReviewStep: React.FC<ReviewStepProps> = ({
   form,
-  selectedPlan,
   agreedToTerms,
   onAgreedToTermsChange,
   createMutation,
   onBack,
   onEditBasicInfo,
+  onChangeInfrastructure,
   onChangePlan,
 }) => {
   const logo = form.getValues('logo');
+  const planName = form.getValues('planName');
+  const planPrice = form.getValues('planPrice');
+  const planCurrency = form.getValues('planCurrency');
+  const regionName = form.getValues('regionName');
+  const cloudProviderName = form.getValues('cloudProviderName');
+  const deploymentName = form.getValues('deploymentName');
+
+  const priceDisplay = planPrice ? `${planCurrency === 'INR' ? '₹' : planCurrency}${planPrice}/month` : null;
 
   return (
     <div className="space-y-4">
@@ -68,6 +76,26 @@ export const ReviewStep: React.FC<ReviewStepProps> = ({
         </div>
       </div>
 
+      {/* Infrastructure summary */}
+      <div className="rounded-lg border p-4 space-y-3">
+        <div className="flex items-center justify-between">
+          <Typography variant="subtitle2">Infrastructure</Typography>
+          <Button variant="link" className="p-0 h-auto" onClick={onChangeInfrastructure}>
+            Change
+          </Button>
+        </div>
+        {[
+          { label: 'Region', value: regionName ?? '—' },
+          { label: 'Provider', value: cloudProviderName ?? '—' },
+          { label: 'Deployment', value: deploymentName ?? '—' },
+        ].map(({ label, value }) => (
+          <div key={label} className="flex justify-between text-sm">
+            <span className="text-muted-foreground">{label}</span>
+            <span className="font-medium">{value}</span>
+          </div>
+        ))}
+      </div>
+
       {/* Plan summary */}
       <div className="rounded-lg border p-4">
         <div className="flex items-center justify-between">
@@ -76,9 +104,12 @@ export const ReviewStep: React.FC<ReviewStepProps> = ({
             Change
           </Button>
         </div>
-        <Typography variant="body1" className="font-medium capitalize mt-2">
-          {selectedPlan}
-        </Typography>
+        <div className="flex items-baseline gap-2 mt-2">
+          <Typography variant="body1" className="font-medium">
+            {planName ?? '—'}
+          </Typography>
+          {priceDisplay && <span className="text-sm text-primary font-semibold">{priceDisplay}</span>}
+        </div>
       </div>
 
       {/* Terms + navigation */}
@@ -92,7 +123,8 @@ export const ReviewStep: React.FC<ReviewStepProps> = ({
           formData.append('subdomain', data.subdomain);
           formData.append('orgIdentifier', data.subdomain);
           formData.append('size', data.size);
-          formData.append('plan', data.plan);
+          if (data.planId != null) formData.append('planId', data.planId);
+          if (data.deploymentId != null) formData.append('deploymentId', data.deploymentId);
           if (data.industryId != null) formData.append('industryId', data.industryId);
           if (data.logo) formData.append('file', data.logo);
           return formData;

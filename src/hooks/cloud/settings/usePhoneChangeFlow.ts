@@ -1,7 +1,6 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-
-import { useCallback, useEffect, useState } from 'react';
 import { verificationService } from '@services/verification.service';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useCallback, useEffect, useState } from 'react';
 
 export type PhoneChangeStep = 'identity' | 'newPhone' | 'verify' | 'success';
 

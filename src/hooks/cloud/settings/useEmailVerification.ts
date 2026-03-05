@@ -1,12 +1,12 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { verificationService } from '@services/verification.service';
 import type {
   RequestChangeRequest,
-  VerifyChangeRequest,
-  VerifyIdentityRequest,
   ResendOtpRequest,
   RevertChangeRequest,
+  VerifyChangeRequest,
+  VerifyIdentityRequest,
 } from '@services/verification.service';
+import { verificationService } from '@services/verification.service';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export function useEmailVerification() {
   const queryClient = useQueryClient();
@@ -16,31 +16,26 @@ export function useEmailVerification() {
   });
 
   const verifyIdentity = useMutation({
-    mutationFn: (data: VerifyIdentityRequest) =>
-      verificationService.verifyEmailIdentity(data),
+    mutationFn: (data: VerifyIdentityRequest) => verificationService.verifyEmailIdentity(data),
   });
 
   const requestChange = useMutation({
-    mutationFn: (data: RequestChangeRequest) =>
-      verificationService.requestEmailChange(data),
+    mutationFn: (data: RequestChangeRequest) => verificationService.requestEmailChange(data),
   });
 
   const verifyChange = useMutation({
-    mutationFn: (data: VerifyChangeRequest) =>
-      verificationService.verifyEmailChange(data),
+    mutationFn: (data: VerifyChangeRequest) => verificationService.verifyEmailChange(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['profile'] });
     },
   });
 
   const resendOtp = useMutation({
-    mutationFn: (data: ResendOtpRequest) =>
-      verificationService.resendEmailOtp(data),
+    mutationFn: (data: ResendOtpRequest) => verificationService.resendEmailOtp(data),
   });
 
   const revert = useMutation({
-    mutationFn: (data: RevertChangeRequest) =>
-      verificationService.revertEmailChange(data),
+    mutationFn: (data: RevertChangeRequest) => verificationService.revertEmailChange(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['profile'] });
     },

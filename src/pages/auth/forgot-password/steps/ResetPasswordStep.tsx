@@ -1,4 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import type { PasswordResetFlow } from '@hooks/password-reset';
+import type { SetPasswordFormData } from '@schemas/auth';
+import { setPasswordSchema } from '@schemas/auth';
 import { Button } from '@vritti/quantum-ui/Button';
 import { Field, FieldGroup, Form } from '@vritti/quantum-ui/Form';
 import { PasswordField } from '@vritti/quantum-ui/PasswordField';
@@ -6,9 +9,6 @@ import { Typography } from '@vritti/quantum-ui/Typography';
 import { KeyRound } from 'lucide-react';
 import type React from 'react';
 import { useForm } from 'react-hook-form';
-import type { PasswordResetFlow } from '@hooks/password-reset';
-import type { SetPasswordFormData } from '@schemas/auth';
-import { setPasswordSchema } from '@schemas/auth';
 
 interface ResetPasswordStepProps {
   mutation: PasswordResetFlow['resetPasswordMutation'];
@@ -40,12 +40,7 @@ export const ResetPasswordStep: React.FC<ResetPasswordStepProps> = ({ mutation }
         </Typography>
       </div>
 
-      <Form
-        form={form}
-        mutation={mutation}
-        transformSubmit={(data) => data.password}
-        showRootError
-      >
+      <Form form={form} mutation={mutation} transformSubmit={(data) => data.password} showRootError>
         <FieldGroup>
           <PasswordField
             name="password"
@@ -62,11 +57,7 @@ export const ResetPasswordStep: React.FC<ResetPasswordStepProps> = ({ mutation }
           />
 
           <Field>
-            <Button
-              type="submit"
-              className="w-full bg-primary text-primary-foreground"
-              loadingText="Resetting..."
-            >
+            <Button type="submit" className="w-full bg-primary text-primary-foreground" loadingText="Resetting...">
               Reset Password
             </Button>
           </Field>

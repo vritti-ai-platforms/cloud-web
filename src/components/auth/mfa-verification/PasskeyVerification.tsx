@@ -1,7 +1,7 @@
-import { Button } from "@vritti/quantum-ui/Button";
-import { Typography } from "@vritti/quantum-ui/Typography";
-import { AlertCircle, KeyRound } from "lucide-react";
-import type React from "react";
+import { Button } from '@vritti/quantum-ui/Button';
+import { Typography } from '@vritti/quantum-ui/Typography';
+import { AlertCircle, KeyRound } from 'lucide-react';
+import type React from 'react';
 
 interface PasskeyVerificationProps {
   /** Callback when passkey verification is triggered */
@@ -19,23 +19,23 @@ const getErrorMessage = (error: Error | null): string | null => {
   if (!error) return null;
 
   // Handle WebAuthn-specific errors
-  if (error.name === "NotAllowedError") {
-    return "Passkey verification was cancelled. Please try again.";
+  if (error.name === 'NotAllowedError') {
+    return 'Passkey verification was cancelled. Please try again.';
   }
-  if (error.name === "NotSupportedError") {
-    return "Passkeys are not supported on this device or browser.";
+  if (error.name === 'NotSupportedError') {
+    return 'Passkeys are not supported on this device or browser.';
   }
-  if (error.name === "SecurityError") {
-    return "Security error. Please ensure you are on a secure connection.";
+  if (error.name === 'SecurityError') {
+    return 'Security error. Please ensure you are on a secure connection.';
   }
-  if (error.name === "InvalidStateError") {
-    return "The passkey is not valid for this account.";
+  if (error.name === 'InvalidStateError') {
+    return 'The passkey is not valid for this account.';
   }
-  if (error.name === "AbortError") {
-    return "The operation was cancelled. Please try again.";
+  if (error.name === 'AbortError') {
+    return 'The operation was cancelled. Please try again.';
   }
 
-  return error.message || "An unexpected error occurred.";
+  return error.message || 'An unexpected error occurred.';
 };
 
 /**
@@ -43,11 +43,7 @@ const getErrorMessage = (error: Error | null): string | null => {
  *
  * Displays key icon and triggers biometric/security key verification.
  */
-export const PasskeyVerification: React.FC<PasskeyVerificationProps> = ({
-  onVerify,
-  isVerifying,
-  error,
-}) => {
+export const PasskeyVerification: React.FC<PasskeyVerificationProps> = ({ onVerify, isVerifying, error }) => {
   const errorMessage = getErrorMessage(error);
 
   return (
@@ -61,9 +57,7 @@ export const PasskeyVerification: React.FC<PasskeyVerificationProps> = ({
 
       {/* Description */}
       <Typography variant="body2" align="center" intent="muted">
-        {isVerifying
-          ? "Follow the prompts on your device..."
-          : "Use your biometric or security key to verify"}
+        {isVerifying ? 'Follow the prompts on your device...' : 'Use your biometric or security key to verify'}
       </Typography>
 
       {/* Error Display */}

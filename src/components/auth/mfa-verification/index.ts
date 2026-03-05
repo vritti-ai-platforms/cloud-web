@@ -1,4 +1,4 @@
-export { TOTPVerification } from "./TOTPVerification";
-export { SMSVerification } from "./SMSVerification";
-export { PasskeyVerification } from "./PasskeyVerification";
-export { MethodSwitcher } from "./MethodSwitcher";
+export { MethodSwitcher } from './MethodSwitcher';
+export { PasskeyVerification } from './PasskeyVerification';
+export { SMSVerification } from './SMSVerification';
+export { TOTPVerification } from './TOTPVerification';

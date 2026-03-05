@@ -1,4 +1,4 @@
-import { axios } from "@vritti/quantum-ui/axios";
+import { axios } from '@vritti/quantum-ui/axios';
 
 export interface OnboardingStatusResponse {
   email: string;
@@ -14,17 +14,19 @@ export interface VerifyEmailDto {
 // Verifies user's email address using OTP code
 export function verifyEmail(otp: string): Promise<OnboardingStatusResponse> {
   return axios
-    .post<OnboardingStatusResponse>("cloud-api/onboarding/email-verification/verify-otp", { otp }, {
-      showSuccessToast: false,
-    })
+    .post<OnboardingStatusResponse>(
+      'cloud-api/onboarding/email-verification/verify-otp',
+      { otp },
+      {
+        showSuccessToast: false,
+      },
+    )
     .then((r) => r.data);
 }
 
 // Retrieves current onboarding status for the authenticated user
 export function getStatus(): Promise<OnboardingStatusResponse> {
-  return axios
-    .get<OnboardingStatusResponse>("cloud-api/onboarding/status")
-    .then((r) => r.data);
+  return axios.get<OnboardingStatusResponse>('cloud-api/onboarding/status').then((r) => r.data);
 }
 
 export interface SendEmailOtpResponse {
@@ -34,15 +36,13 @@ export interface SendEmailOtpResponse {
 
 // Sends initial email verification OTP for email signup users
 export function sendEmailOtp(): Promise<SendEmailOtpResponse> {
-  return axios
-    .post<SendEmailOtpResponse>("cloud-api/onboarding/email-verification/send-otp")
-    .then((r) => r.data);
+  return axios.post<SendEmailOtpResponse>('cloud-api/onboarding/email-verification/send-otp').then((r) => r.data);
 }
 
 // Changes the user's email during onboarding and sends a new OTP
 export function changeEmail(email: string): Promise<SendEmailOtpResponse> {
   return axios
-    .post<SendEmailOtpResponse>("cloud-api/onboarding/email-verification/change-email", { email })
+    .post<SendEmailOtpResponse>('cloud-api/onboarding/email-verification/change-email', { email })
     .then((r) => r.data);
 }
 
@@ -53,9 +53,7 @@ export interface SetPasswordResponse {
 
 // Sets password for OAuth users during onboarding
 export function setPassword(password: string): Promise<SetPasswordResponse> {
-  return axios
-    .post<SetPasswordResponse>("cloud-api/onboarding/set-password", { password })
-    .then((r) => r.data);
+  return axios.post<SetPasswordResponse>('cloud-api/onboarding/set-password', { password }).then((r) => r.data);
 }
 
 // ============================================================================
@@ -86,30 +84,22 @@ export interface TwoFactorStatusResponse {
 
 // Initiates TOTP setup and returns QR code for authenticator apps
 export function initiateTotpSetup(): Promise<TotpSetupResponse> {
-  return axios
-    .post<TotpSetupResponse>("cloud-api/onboarding/mfa/totp/setup")
-    .then((r) => r.data);
+  return axios.post<TotpSetupResponse>('cloud-api/onboarding/mfa/totp/setup').then((r) => r.data);
 }
 
 // Verifies TOTP setup with a 6-digit code and returns backup codes
 export function verifyTotpSetup(code: string): Promise<BackupCodesResponse> {
-  return axios
-    .post<BackupCodesResponse>("cloud-api/onboarding/mfa/totp/verify", { code })
-    .then((r) => r.data);
+  return axios.post<BackupCodesResponse>('cloud-api/onboarding/mfa/totp/verify', { code }).then((r) => r.data);
 }
 
 // Skips MFA setup and completes onboarding without MFA
 export function skipMFASetup(): Promise<{ success: boolean; message: string }> {
-  return axios
-    .post<{ success: boolean; message: string }>("cloud-api/onboarding/mfa/skip")
-    .then((r) => r.data);
+  return axios.post<{ success: boolean; message: string }>('cloud-api/onboarding/mfa/skip').then((r) => r.data);
 }
 
 // Gets current MFA status for the authenticated user
 export function getMFAStatus(): Promise<TwoFactorStatusResponse> {
-  return axios
-    .get<TwoFactorStatusResponse>("cloud-api/onboarding/mfa/status")
-    .then((r) => r.data);
+  return axios.get<TwoFactorStatusResponse>('cloud-api/onboarding/mfa/status').then((r) => r.data);
 }
 
 // ============================================================================
@@ -124,20 +114,20 @@ export interface PublicKeyCredentialCreationOptions {
   rp: { name: string; id?: string };
   user: { id: string; name: string; displayName: string };
   challenge: string;
-  pubKeyCredParams: Array<{ alg: number; type: "public-key" }>;
+  pubKeyCredParams: Array<{ alg: number; type: 'public-key' }>;
   timeout?: number;
   excludeCredentials?: Array<{
     id: string;
-    type: "public-key";
+    type: 'public-key';
     transports?: string[];
   }>;
   authenticatorSelection?: {
-    authenticatorAttachment?: "platform" | "cross-platform";
-    residentKey?: "discouraged" | "preferred" | "required";
+    authenticatorAttachment?: 'platform' | 'cross-platform';
+    residentKey?: 'discouraged' | 'preferred' | 'required';
     requireResidentKey?: boolean;
-    userVerification?: "discouraged" | "preferred" | "required";
+    userVerification?: 'discouraged' | 'preferred' | 'required';
   };
-  attestation?: "none" | "indirect" | "direct" | "enterprise";
+  attestation?: 'none' | 'indirect' | 'direct' | 'enterprise';
 }
 
 export interface RegistrationResponseJSON {
@@ -148,23 +138,19 @@ export interface RegistrationResponseJSON {
     attestationObject: string;
     transports?: string[];
   };
-  authenticatorAttachment?: "platform" | "cross-platform";
+  authenticatorAttachment?: 'platform' | 'cross-platform';
   clientExtensionResults: Record<string, unknown>;
-  type: "public-key";
+  type: 'public-key';
 }
 
 // Initiates Passkey setup and returns WebAuthn registration options
 export function initiatePasskeySetup(): Promise<PasskeyRegistrationOptionsResponse> {
-  return axios
-    .post<PasskeyRegistrationOptionsResponse>("cloud-api/onboarding/mfa/passkey/setup")
-    .then((r) => r.data);
+  return axios.post<PasskeyRegistrationOptionsResponse>('cloud-api/onboarding/mfa/passkey/setup').then((r) => r.data);
 }
 
 // Verifies Passkey setup with browser credential and returns backup codes
 export function verifyPasskeySetup(credential: RegistrationResponseJSON): Promise<BackupCodesResponse> {
-  return axios
-    .post<BackupCodesResponse>("cloud-api/onboarding/mfa/passkey/verify", { credential })
-    .then((r) => r.data);
+  return axios.post<BackupCodesResponse>('cloud-api/onboarding/mfa/passkey/verify', { credential }).then((r) => r.data);
 }
 
 // ============================================================================
@@ -193,16 +179,18 @@ export interface MobileVerificationStatusResponse {
 }
 
 // Initiates manual SMS mobile verification for the authenticated user
-export function initiateMobileVerification(data: InitiateMobileVerificationDto): Promise<MobileVerificationStatusResponse> {
+export function initiateMobileVerification(
+  data: InitiateMobileVerificationDto,
+): Promise<MobileVerificationStatusResponse> {
   return axios
-    .post<MobileVerificationStatusResponse>("cloud-api/onboarding/mobile-verification/initiate/manual", data)
+    .post<MobileVerificationStatusResponse>('cloud-api/onboarding/mobile-verification/initiate/manual', data)
     .then((r) => r.data);
 }
 
 // Verifies mobile number using OTP entered by user
 export function verifyMobileOtp(otp: string): Promise<{ success: boolean; message: string }> {
   return axios
-    .post<{ success: boolean; message: string }>("cloud-api/onboarding/mobile-verification/verify-otp", { otp })
+    .post<{ success: boolean; message: string }>('cloud-api/onboarding/mobile-verification/verify-otp', { otp })
     .then((r) => r.data);
 }
 
@@ -213,7 +201,5 @@ export interface CompleteOnboardingResponse {
 
 // Upgrades session to CLOUD and rotates tokens — called on "Go to Dashboard"
 export function completeOnboarding(): Promise<CompleteOnboardingResponse> {
-  return axios
-    .post<CompleteOnboardingResponse>('cloud-api/onboarding/complete')
-    .then((r) => r.data);
+  return axios.post<CompleteOnboardingResponse>('cloud-api/onboarding/complete').then((r) => r.data);
 }

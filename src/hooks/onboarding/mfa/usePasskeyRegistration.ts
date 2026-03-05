@@ -1,7 +1,7 @@
 import {
   type BackupCodesResponse,
-  type RegistrationResponseJSON,
   initiatePasskeySetup,
+  type RegistrationResponseJSON,
   verifyPasskeySetup,
 } from '@services/onboarding.service';
 import { startRegistration } from '@simplewebauthn/browser';

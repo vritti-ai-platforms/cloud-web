@@ -27,7 +27,7 @@ export const RegionViewPage = () => {
   const { data: region, isLoading: regionLoading } = useRegion(id ?? '');
   const { data: assignedProviders = [], isLoading: assignedLoading } = useRegionCloudProviders(id ?? '');
   const { data: allProvidersResponse, isLoading: allProvidersLoading } = useCloudProviders();
-  const allProviders = allProvidersResponse?.data ?? [];
+  const allProviders = allProvidersResponse?.result ?? [];
 
   const deleteMutation = useDeleteRegion({
     onSuccess: () => navigate('/regions'),
@@ -144,7 +144,9 @@ export const RegionViewPage = () => {
       {/* Edit dialog */}
       <Dialog
         open={editDialog.isOpen}
-        onOpenChange={(v) => { if (!v) editDialog.close(); }}
+        onOpenChange={(v) => {
+          if (!v) editDialog.close();
+        }}
         title="Edit Region"
         description="Update the details for this region."
         content={(close) => <EditRegionForm region={region} onSuccess={close} onCancel={close} />}
@@ -153,7 +155,9 @@ export const RegionViewPage = () => {
       {/* Delete confirmation dialog */}
       <Dialog
         open={deleteDialog.isOpen}
-        onOpenChange={(v) => { if (!v) deleteDialog.close(); }}
+        onOpenChange={(v) => {
+          if (!v) deleteDialog.close();
+        }}
         title="Delete Region"
         description={`Are you sure you want to delete "${region.name}"? This action cannot be undone.`}
         footer={

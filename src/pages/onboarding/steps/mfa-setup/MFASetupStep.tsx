@@ -43,27 +43,22 @@ export const MFASetupStep: React.FC = () => {
             setMethod(m);
             setProgress(25);
           }}
-          onSuccess={() => { setProgress(75); refetch(); }}
+          onSuccess={() => {
+            setProgress(75);
+            refetch();
+          }}
         />
       );
 
     case 'authenticator-setup':
-      return (
-        <AuthenticatorSetupStep onBack={handleBack} onSuccess={handleVerifySuccess} />
-      );
+      return <AuthenticatorSetupStep onBack={handleBack} onSuccess={handleVerifySuccess} />;
 
     case 'passkey-setup':
-      return (
-        <PasskeySetupStep onBack={handleBack} onSuccess={handleVerifySuccess} />
-      );
+      return <PasskeySetupStep onBack={handleBack} onSuccess={handleVerifySuccess} />;
 
     case 'backup-codes':
       return backupCodes ? (
-        <BackupCodesStep
-          backupCodes={backupCodes}
-          warning={backupWarning}
-          onContinue={refetch}
-        />
+        <BackupCodesStep backupCodes={backupCodes} warning={backupWarning} onContinue={refetch} />
       ) : null;
   }
 };

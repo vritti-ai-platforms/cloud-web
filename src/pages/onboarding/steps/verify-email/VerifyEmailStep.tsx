@@ -6,7 +6,9 @@ import { VerifyEmailForm } from './forms/VerifyEmailForm';
 export const VerifyEmailStep: React.FC = () => {
   const [view, setView] = useState<'verify' | 'change'>('verify');
 
-  return view === 'verify'
-    ? <VerifyEmailForm onChangeClick={() => setView('change')} />
-    : <ChangeEmailForm onBack={() => setView('verify')} />;
+  return view === 'verify' ? (
+    <VerifyEmailForm onChangeClick={() => setView('change')} />
+  ) : (
+    <ChangeEmailForm onBack={() => setView('verify')} />
+  );
 };

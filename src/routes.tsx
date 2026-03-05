@@ -7,7 +7,11 @@ import { AuthLayout } from './components/layouts/AuthLayout';
 import { OrgLayout } from './components/layouts/OrgLayout';
 import './index.css';
 import { CloudProvidersPage } from './pages/admin/cloud-providers/CloudProvidersPage';
+import { DeploymentsPage } from './pages/admin/deployments/DeploymentsPage';
+import { DeploymentViewPage } from './pages/admin/deployments/DeploymentViewPage';
 import { IndustriesPage } from './pages/admin/industries/IndustriesPage';
+import { PlansPage } from './pages/admin/plans/PlansPage';
+import { PlanViewPage } from './pages/admin/plans/PlanViewPage';
 import { RegionsPage } from './pages/admin/regions/RegionsPage';
 import { RegionViewPage } from './pages/admin/regions/RegionViewPage';
 import { AuthErrorPage } from './pages/auth/AuthErrorPage';
@@ -107,12 +111,28 @@ export const adminRoutes: RouteObject[] = [
         element: <IndustriesPage />,
       },
       {
+        path: 'plans',
+        element: <PlansPage />,
+      },
+      {
+        path: 'plans/:slug',
+        element: <PlanViewPage />,
+      },
+      {
         path: 'regions',
         element: <RegionsPage />,
       },
       {
         path: 'regions/:slug',
         element: <RegionViewPage />,
+      },
+      {
+        path: 'deployments',
+        element: <DeploymentsPage />,
+      },
+      {
+        path: 'deployments/:slug',
+        element: <DeploymentViewPage />,
       },
     ],
   },

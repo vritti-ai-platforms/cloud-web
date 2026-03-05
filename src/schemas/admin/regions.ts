@@ -1,13 +1,23 @@
-import { z } from 'zod';
 import type { TableViewState } from '@vritti/quantum-ui/table-filter';
+import { z } from 'zod';
+
+export interface RegionProvider {
+  id: string;
+  name: string;
+  logoUrl: string | null;
+  logoDarkUrl: string | null;
+}
 
 export interface Region {
   id: string;
   name: string;
   code: string;
+  country: string;
   state: string;
   city: string;
+  isActive: boolean;
   providerCount: number;
+  providers: RegionProvider[];
   createdAt: string;
   updatedAt: string | null;
 }
@@ -21,7 +31,7 @@ export interface RegionCloudProvider {
 }
 
 export interface RegionsResponse {
-  data: Region[];
+  result: Region[];
   state: TableViewState;
   activeViewId: string | null;
 }
@@ -29,8 +39,10 @@ export interface RegionsResponse {
 export const createRegionSchema = z.object({
   name: z.string().min(1, 'Region name is required'),
   code: z.string().min(1, 'Region code is required').max(100, 'Code must be 100 characters or less'),
+  country: z.string().min(1, 'Country is required').max(100),
   state: z.string().min(1, 'State is required').max(100),
   city: z.string().min(1, 'City is required').max(100),
+  isActive: z.boolean().optional(),
 });
 
 export const updateRegionSchema = createRegionSchema.partial();

@@ -1,8 +1,8 @@
-import { Button } from "@vritti/quantum-ui/Button";
-import { Typography } from "@vritti/quantum-ui/Typography";
-import { KeyRound, ShieldCheck, Smartphone } from "lucide-react";
-import type React from "react";
 import type { MFAMethod } from '@services/auth.service';
+import { Button } from '@vritti/quantum-ui/Button';
+import { Typography } from '@vritti/quantum-ui/Typography';
+import { KeyRound, ShieldCheck, Smartphone } from 'lucide-react';
+import type React from 'react';
 
 interface MethodSwitcherProps {
   /** Currently active MFA method */
@@ -16,13 +16,10 @@ interface MethodSwitcherProps {
 /**
  * Method configuration for display
  */
-const METHOD_CONFIG: Record<
-  MFAMethod,
-  { icon: React.ComponentType<{ className?: string }>; label: string }
-> = {
-  totp: { icon: ShieldCheck, label: "Authenticator" },
-  sms: { icon: Smartphone, label: "SMS" },
-  passkey: { icon: KeyRound, label: "Passkey" },
+const METHOD_CONFIG: Record<MFAMethod, { icon: React.ComponentType<{ className?: string }>; label: string }> = {
+  totp: { icon: ShieldCheck, label: 'Authenticator' },
+  sms: { icon: Smartphone, label: 'SMS' },
+  passkey: { icon: KeyRound, label: 'Passkey' },
 };
 
 /**
@@ -31,15 +28,9 @@ const METHOD_CONFIG: Record<
  * Displays horizontal divider with "Or use" text and method buttons
  * for switching between available MFA methods.
  */
-export const MethodSwitcher: React.FC<MethodSwitcherProps> = ({
-  currentMethod,
-  availableMethods,
-  onMethodChange,
-}) => {
+export const MethodSwitcher: React.FC<MethodSwitcherProps> = ({ currentMethod, availableMethods, onMethodChange }) => {
   // Filter out the current method to show only alternative methods
-  const alternativeMethods = availableMethods.filter(
-    (method) => method !== currentMethod,
-  );
+  const alternativeMethods = availableMethods.filter((method) => method !== currentMethod);
 
   // Don't render if no alternative methods available
   if (alternativeMethods.length === 0) {
@@ -73,10 +64,7 @@ export const MethodSwitcher: React.FC<MethodSwitcherProps> = ({
               <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
                 <Icon className="h-4 w-4 text-foreground" />
               </div>
-              <Typography
-                variant="body2"
-                className="text-xs text-foreground font-medium"
-              >
+              <Typography variant="body2" className="text-xs text-foreground font-medium">
                 {config.label}
               </Typography>
             </Button>

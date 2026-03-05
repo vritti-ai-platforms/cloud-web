@@ -25,21 +25,23 @@ export const TopBar = () => {
 
         {/* Breadcrumb */}
         <div className="flex-1">
-          {showBreadcrumb && <Breadcrumb
-            maxItems={4}
-            renderSegment={(segment) => {
-              // First-level segment with org- prefix = org slug
-              if (segment.path.match(/^\/[^/]+$/) && segment.raw.startsWith(ORG_SLUG_PREFIX)) {
-                return (
-                  <CompanySwitcher
-                    currentOrgId={segment.id ?? segment.raw}
-                    currentOrgName={segment.slug ? segment.label : undefined}
-                  />
-                );
-              }
-              return undefined;
-            }}
-          />}
+          {showBreadcrumb && (
+            <Breadcrumb
+              maxItems={4}
+              renderSegment={(segment) => {
+                // First-level segment with org- prefix = org slug
+                if (segment.path.match(/^\/[^/]+$/) && segment.raw.startsWith(ORG_SLUG_PREFIX)) {
+                  return (
+                    <CompanySwitcher
+                      currentOrgId={segment.id ?? segment.raw}
+                      currentOrgName={segment.slug ? segment.label : undefined}
+                    />
+                  );
+                }
+                return undefined;
+              }}
+            />
+          )}
         </div>
 
         {/* Right Actions */}

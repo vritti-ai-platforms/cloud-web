@@ -1,6 +1,6 @@
+import { verificationService } from '@services/verification.service';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useState } from 'react';
-import { verificationService } from '@services/verification.service';
 
 export type EmailChangeStep = 'identity' | 'newEmail' | 'verify' | 'success';
 
@@ -124,10 +124,7 @@ export function useEmailChangeFlow(currentEmail: string) {
   const handleResendOtp = async () => {
     clearError();
     try {
-      const verificationId =
-        state.step === 'identity'
-          ? state.identityVerificationId
-          : state.changeVerificationId;
+      const verificationId = state.step === 'identity' ? state.identityVerificationId : state.changeVerificationId;
       await verificationService.resendEmailOtp({ verificationId });
       setResendTimer(45);
     } catch (err) {
@@ -143,12 +140,7 @@ export function useEmailChangeFlow(currentEmail: string) {
     clearError();
     setState((prev) => ({
       ...prev,
-      step:
-        prev.step === 'verify'
-          ? 'newEmail'
-          : prev.step === 'newEmail'
-            ? 'identity'
-            : prev.step,
+      step: prev.step === 'verify' ? 'newEmail' : prev.step === 'newEmail' ? 'identity' : prev.step,
     }));
   };
 

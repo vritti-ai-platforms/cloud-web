@@ -1,10 +1,10 @@
+import { useSendEmailOtp } from '@hooks/onboarding';
 import { toast } from '@vritti/quantum-ui';
 import { Button } from '@vritti/quantum-ui/Button';
 import { Typography } from '@vritti/quantum-ui/Typography';
 import { CheckCircle2 } from 'lucide-react';
 import type React from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
-import { useSendEmailOtp } from '@hooks/onboarding';
 
 interface AuthSuccessState {
   isEmail?: boolean;

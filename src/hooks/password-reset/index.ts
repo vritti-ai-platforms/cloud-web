@@ -1,4 +1,4 @@
 export { useForgotPassword } from './useForgotPassword';
-export { useVerifyResetOtp } from './useVerifyResetOtp';
+export { type PasswordResetFlow, type Step, usePasswordResetFlow } from './usePasswordResetFlow';
 export { useResetPassword } from './useResetPassword';
-export { usePasswordResetFlow, type PasswordResetFlow, type Step } from './usePasswordResetFlow';
+export { useVerifyResetOtp } from './useVerifyResetOtp';

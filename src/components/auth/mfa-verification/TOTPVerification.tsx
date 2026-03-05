@@ -1,15 +1,15 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@vritti/quantum-ui/Button";
-import { Field, FieldGroup, Form } from "@vritti/quantum-ui/Form";
-import { OTPField } from "@vritti/quantum-ui/OTPField";
-import { Typography } from "@vritti/quantum-ui/Typography";
-import { ShieldCheck } from "lucide-react";
-import type React from "react";
-import { useForm } from "react-hook-form";
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useVerifyTotp } from '@hooks/auth';
 import type { OTPFormData } from '@schemas/auth';
 import { otpSchema } from '@schemas/auth';
 import type { LoginResponse } from '@services/auth.service';
+import { Button } from '@vritti/quantum-ui/Button';
+import { Field, FieldGroup, Form } from '@vritti/quantum-ui/Form';
+import { OTPField } from '@vritti/quantum-ui/OTPField';
+import { Typography } from '@vritti/quantum-ui/Typography';
+import { ShieldCheck } from 'lucide-react';
+import type React from 'react';
+import { useForm } from 'react-hook-form';
 
 interface TOTPVerificationProps {
   /** MFA session ID for verification */
@@ -26,15 +26,12 @@ interface TOTPVerificationProps {
  *
  * Owns its own mutation and uses Form's mutation prop for automatic error handling.
  */
-export const TOTPVerification: React.FC<TOTPVerificationProps> = ({
-  sessionId,
-  onSuccess,
-}) => {
+export const TOTPVerification: React.FC<TOTPVerificationProps> = ({ sessionId, onSuccess }) => {
   const verifyTotpMutation = useVerifyTotp({ onSuccess });
 
   const form = useForm<OTPFormData>({
     resolver: zodResolver(otpSchema),
-    defaultValues: { code: "" },
+    defaultValues: { code: '' },
   });
 
   return (

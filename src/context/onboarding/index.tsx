@@ -1,8 +1,8 @@
-import { useQuery } from '@tanstack/react-query';
-import { createContext, useContext, useEffect, useState } from 'react';
-import type React from 'react';
 import type { OnboardingStatusResponse } from '@services/onboarding.service';
 import { getStatus } from '@services/onboarding.service';
+import { useQuery } from '@tanstack/react-query';
+import type React from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 export interface OnboardingContextType extends OnboardingStatusResponse {
   isLoading: boolean;

@@ -1,5 +1,5 @@
-import { z } from 'zod';
 import type { TableViewState } from '@vritti/quantum-ui/table-filter';
+import { z } from 'zod';
 
 export interface Industry {
   id: string;
@@ -12,7 +12,8 @@ export interface Industry {
 }
 
 export interface IndustriesResponse {
-  data: Industry[];
+  result: Industry[];
+  count: number;
   state: TableViewState;
   activeViewId: string | null;
 }

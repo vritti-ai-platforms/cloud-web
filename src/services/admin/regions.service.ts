@@ -1,5 +1,11 @@
 import { axios } from '@vritti/quantum-ui/axios';
-import type { CreateRegionData, Region, RegionCloudProvider, RegionsResponse, UpdateRegionData } from '@/schemas/admin/regions';
+import type {
+  CreateRegionData,
+  Region,
+  RegionCloudProvider,
+  RegionsResponse,
+  UpdateRegionData,
+} from '@/schemas/admin/regions';
 
 // Fetches all regions — server applies filter/sort state
 export function getRegions(): Promise<RegionsResponse> {

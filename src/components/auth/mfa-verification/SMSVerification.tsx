@@ -1,16 +1,16 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@vritti/quantum-ui/Button";
-import { Field, FieldGroup, Form } from "@vritti/quantum-ui/Form";
-import { OTPField } from "@vritti/quantum-ui/OTPField";
-import { Typography } from "@vritti/quantum-ui/Typography";
-import { Smartphone } from "lucide-react";
-import type React from "react";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useSendSmsCode, useVerifySms } from '@hooks/auth';
 import type { OTPFormData } from '@schemas/auth';
 import { otpSchema } from '@schemas/auth';
 import type { LoginResponse } from '@services/auth.service';
+import { Button } from '@vritti/quantum-ui/Button';
+import { Field, FieldGroup, Form } from '@vritti/quantum-ui/Form';
+import { OTPField } from '@vritti/quantum-ui/OTPField';
+import { Typography } from '@vritti/quantum-ui/Typography';
+import { Smartphone } from 'lucide-react';
+import type React from 'react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 interface SMSVerificationProps {
   /** MFA session ID for verification */
@@ -29,11 +29,7 @@ interface SMSVerificationProps {
  *
  * Owns its own mutations and uses Form's mutation prop for automatic error handling.
  */
-export const SMSVerification: React.FC<SMSVerificationProps> = ({
-  sessionId,
-  maskedPhone,
-  onSuccess,
-}) => {
+export const SMSVerification: React.FC<SMSVerificationProps> = ({ sessionId, maskedPhone, onSuccess }) => {
   const [codeSent, setCodeSent] = useState(false);
 
   const sendSmsMutation = useSendSmsCode({
@@ -46,7 +42,7 @@ export const SMSVerification: React.FC<SMSVerificationProps> = ({
 
   const form = useForm<OTPFormData>({
     resolver: zodResolver(otpSchema),
-    defaultValues: { code: "" },
+    defaultValues: { code: '' },
   });
 
   const handleSendCode = () => {
@@ -69,9 +65,7 @@ export const SMSVerification: React.FC<SMSVerificationProps> = ({
 
       {/* Description */}
       <Typography variant="body2" align="center" intent="muted">
-        {codeSent
-          ? `Enter the 6-digit code sent to ${maskedPhone}`
-          : `Send verification code to ${maskedPhone}`}
+        {codeSent ? `Enter the 6-digit code sent to ${maskedPhone}` : `Send verification code to ${maskedPhone}`}
       </Typography>
 
       {!codeSent ? (

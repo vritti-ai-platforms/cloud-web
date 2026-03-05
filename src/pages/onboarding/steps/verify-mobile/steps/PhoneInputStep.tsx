@@ -70,11 +70,7 @@ export const PhoneInputStep: React.FC<PhoneInputStepProps> = ({ onSuccess, onBac
         showRootError
       >
         <FieldGroup>
-          <PhoneField
-            name="phone"
-            label="Phone Number"
-            defaultCountry="IN"
-          />
+          <PhoneField name="phone" label="Phone Number" defaultCountry="IN" />
 
           <Field>
             <Button type="submit" className="w-full bg-primary text-primary-foreground" loadingText="Sending Code...">
