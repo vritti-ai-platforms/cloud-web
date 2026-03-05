@@ -30,9 +30,7 @@ export const CloudProvidersPage = () => {
     enableRowSelection: false,
     enableSorting: true,
     enableMultiSort: false,
-    viewsConfig: {
-      onStateApplied: () => queryClient.invalidateQueries({ queryKey: CLOUD_PROVIDERS_QUERY_KEY }),
-    },
+    onStateApplied: () => queryClient.invalidateQueries({ queryKey: CLOUD_PROVIDERS_QUERY_KEY }),
   });
 
   return (
@@ -44,7 +42,7 @@ export const CloudProvidersPage = () => {
       <DataTable
         table={table}
         isLoading={isLoading}
-        viewsConfig={{ onStateApplied: () => queryClient.invalidateQueries({ queryKey: CLOUD_PROVIDERS_QUERY_KEY }) }}
+        onStateApplied={() => queryClient.invalidateQueries({ queryKey: CLOUD_PROVIDERS_QUERY_KEY })}
         filters={[
           <ValueFilter key="name" name="name" label="Name" fieldType="string" />,
           <ValueFilter key="code" name="code" label="Code" fieldType="string" />,
