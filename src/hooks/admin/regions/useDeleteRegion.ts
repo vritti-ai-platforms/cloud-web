@@ -9,6 +9,7 @@ type UseDeleteRegionOptions = Omit<UseMutationOptions<void, AxiosError, string>,
 export function useDeleteRegion(options?: UseDeleteRegionOptions) {
   const queryClient = useQueryClient();
   return useMutation<void, AxiosError, string>({
+    ...options,
     mutationFn: deleteRegion,
     ...options,
     onSuccess: (...args) => {
