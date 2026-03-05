@@ -15,8 +15,7 @@ export function useCreateRegion(options?: UseCreateRegionOptions) {
   return useMutation<{ success: boolean; message: string }, AxiosError, CreateRegionData>({
     ...options,
     mutationFn: createRegion,
-    ...options,
-    onSuccess: (newRegion, ...args) => {
+    onSuccess: (result, ...args) => {
       queryClient.invalidateQueries({ queryKey: REGIONS_QUERY_KEY });
       options?.onSuccess?.(result, ...args);
     },
