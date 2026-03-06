@@ -1,9 +1,9 @@
 import { axios } from '@vritti/quantum-ui/axios';
 import type { CreateIndustryData, IndustriesResponse } from '@/schemas/admin/industries';
 
-// Fetches all industries — server applies filter/sort state
+// Fetches industries for the data table — server applies filter/sort state
 export function getIndustries(): Promise<IndustriesResponse> {
-  return axios.get<IndustriesResponse>('admin-api/industries').then((r) => r.data);
+  return axios.get<IndustriesResponse>('admin-api/industries/table').then((r) => r.data);
 }
 
 // Creates a new industry

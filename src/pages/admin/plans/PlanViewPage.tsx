@@ -16,12 +16,12 @@ import { EditPriceForm } from './forms/EditPriceForm';
 export const PlanViewPage = () => {
   const { id: planId } = useSlugParams();
 
-  const { data: plans = [] } = usePlans();
+  const { data: plansResponse } = usePlans();
   const { data: prices = [], isLoading } = usePricesByPlan(planId ?? '');
 
   const deleteMutation = useDeletePrice();
 
-  const plan = plans.find((p) => p.id === planId);
+  const plan = plansResponse?.result.find((p) => p.id === planId);
 
   if (!planId) return null;
 

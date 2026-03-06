@@ -7,9 +7,9 @@ import type {
   UpdateRegionData,
 } from '@/schemas/admin/regions';
 
-// Fetches all regions — server applies filter/sort state
+// Fetches regions for the data table — server applies filter/sort state
 export function getRegions(): Promise<RegionsResponse> {
-  return axios.get<RegionsResponse>('admin-api/regions').then((r) => r.data);
+  return axios.get<RegionsResponse>('admin-api/regions/table').then((r) => r.data);
 }
 
 // Fetches a single region by ID

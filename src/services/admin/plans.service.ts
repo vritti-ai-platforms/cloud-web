@@ -3,11 +3,12 @@ import type { CreatePlanData, Plan, UpdatePlanData } from '@/schemas/admin/plans
 
 export interface PlansResponse {
   result: Plan[];
+  count: number;
 }
 
 // Fetches all plans
 export function getPlans(): Promise<PlansResponse> {
-  return axios.get<Plan[]>('admin-api/plans').then((r) => ({ result: r.data }));
+  return axios.get<PlansResponse>('admin-api/plans').then((r) => r.data);
 }
 
 // Creates a new plan

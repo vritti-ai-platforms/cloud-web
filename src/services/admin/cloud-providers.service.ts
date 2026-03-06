@@ -9,9 +9,9 @@ export interface CloudProvidersResponse {
   activeViewId: string | null;
 }
 
-// Fetches all cloud providers — server applies filter/sort state from Redis
+// Fetches cloud providers for the data table — server applies filter/sort state from Redis
 export function getCloudProviders(): Promise<CloudProvidersResponse> {
-  return axios.get<CloudProvidersResponse>('admin-api/cloud-providers').then((r) => r.data);
+  return axios.get<CloudProvidersResponse>('admin-api/cloud-providers/table').then((r) => r.data);
 }
 
 // Creates a new cloud provider
