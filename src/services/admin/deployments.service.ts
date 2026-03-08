@@ -9,11 +9,12 @@ import type {
 
 export interface DeploymentsResponse {
   result: Deployment[];
+  count: number;
 }
 
 // Fetches all deployments with region and provider names
 export function getDeployments(): Promise<DeploymentsResponse> {
-  return axios.get<Deployment[]>('admin-api/deployments').then((r) => ({ result: r.data }));
+  return axios.get<DeploymentsResponse>('admin-api/deployments').then((r) => r.data);
 }
 
 // Fetches a single deployment by ID
