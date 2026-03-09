@@ -5,9 +5,10 @@ export interface RegionProvider {
   id: string;
   name: string;
   code: string;
-  logoUrl: string | null;
+  logoUrl: string;
   logoDarkUrl: string | null;
   isAssigned: boolean;
+  deploymentCount: number;
 }
 
 export interface Region {

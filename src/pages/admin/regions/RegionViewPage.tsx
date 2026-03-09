@@ -1,15 +1,12 @@
-import {
-  useAddCloudProvider,
-  useDeleteRegion,
-  useRegion,
-  useRemoveCloudProvider,
-} from '@hooks/admin/regions';
+import { useAddCloudProvider, useDeleteRegion, useRegion, useRemoveCloudProvider } from '@hooks/admin/regions';
+import { cn } from '@vritti/quantum-ui';
+import { Badge } from '@vritti/quantum-ui/Badge';
 import { Button } from '@vritti/quantum-ui/Button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@vritti/quantum-ui/Card';
 import { DangerZone } from '@vritti/quantum-ui/DangerZone';
 import { Dialog } from '@vritti/quantum-ui/Dialog';
-import { useConfirm, useDialog, useSlugParams } from '@vritti/quantum-ui/hooks';
 import { Empty } from '@vritti/quantum-ui/Empty';
+import { useConfirm, useDialog, useSlugParams, useTheme } from '@vritti/quantum-ui/hooks';
 import { PageHeader } from '@vritti/quantum-ui/PageHeader';
 import { Spinner } from '@vritti/quantum-ui/Spinner';
 import { DollarSign, Layers, Link2, Link2Off, Server, ServerOff } from 'lucide-react';
@@ -23,6 +20,7 @@ export const RegionViewPage = () => {
   const editDialog = useDialog();
   const confirm = useConfirm();
 
+  const { theme } = useTheme();
   const { data: region, isLoading: regionLoading } = useRegion(id ?? '');
 
   const deleteMutation = useDeleteRegion({
@@ -129,38 +127,57 @@ export const RegionViewPage = () => {
               icon={<ServerOff />}
               title="No cloud providers"
               description="No cloud providers have been configured yet. Add a provider to assign it to this region."
-              action={<Button size="sm" onClick={() => navigate('/cloud-providers')}>Add Provider</Button>}
+              action={
+                <Button size="sm" onClick={() => navigate('/cloud-providers')}>
+                  Add Provider
+                </Button>
+              }
             />
           ) : (
-            <div className="flex flex-col divide-y divide-border border border-border rounded-lg">
+            <div className="flex flex-col gap-2">
               {allProviders.map((provider) => {
                 const isPending =
                   (addProviderMutation.isPending && addProviderMutation.variables?.providerId === provider.id) ||
                   (removeProviderMutation.isPending && removeProviderMutation.variables?.providerId === provider.id);
 
                 return (
-                  <div key={provider.id} className={`flex items-center justify-between py-3 px-4 ${provider.isAssigned ? 'border-l-2 border-l-primary' : 'border-l-2 border-l-transparent'}`}>
+                  <div
+                    key={provider.id}
+                    className={cn(
+                      'flex items-center justify-between px-3 rounded-xl border h-[69px]',
+                      provider.isAssigned ? 'bg-primary/5 border-primary/30' : 'border-border',
+                    )}
+                  >
                     <div className="flex items-center gap-3">
-                      {provider.logoUrl ? (
-                        <img src={provider.logoUrl} alt={provider.name} className="size-8 object-contain" />
-                      ) : (
-                        <div className="size-8 rounded-md bg-muted flex items-center justify-center">
-                          <Server className="size-4 text-muted-foreground" />
-                        </div>
-                      )}
+                      <img
+                        src={theme === 'dark' ? (provider.logoDarkUrl ?? provider.logoUrl) : provider.logoUrl}
+                        alt={provider.name}
+                        className="size-9 object-contain"
+                      />
                       <div className="flex flex-col gap-0.5">
-                        <span className="text-sm font-medium">{provider.name}</span>
-                        <span className="text-xs text-muted-foreground font-mono">{provider.code}</span>
+                        <span className="text-sm">{provider.name}</span>
+                        <div className="flex items-center gap-2">
+                          <Badge variant="outline" className="font-mono text-[10px]">
+                            {provider.code}
+                          </Badge>
+                          {provider.deploymentCount > 0 && (
+                            <Badge variant="secondary">
+                              {provider.deploymentCount} deployment{provider.deploymentCount !== 1 ? 's' : ''}
+                            </Badge>
+                          )}
+                        </div>
                       </div>
                     </div>
                     <Button
-                      variant={provider.isAssigned ? 'outline' : 'secondary'}
+                      variant={provider.isAssigned ? 'default' : 'outline'}
                       size="sm"
                       isLoading={isPending}
                       loadingText={provider.isAssigned ? 'Removing' : 'Adding'}
-                      startAdornment={provider.isAssigned ? <Link2Off className="size-4" /> : <Link2 className="size-4" />}
+                      startAdornment={
+                        provider.isAssigned ? <Link2Off className="size-4" /> : <Link2 className="size-4" />
+                      }
+                      className="min-w-24"
                       onClick={() => handleProviderToggle(provider.id, !provider.isAssigned)}
-                      aria-label={`${provider.isAssigned ? 'Remove' : 'Add'} ${provider.name}`}
                     >
                       {provider.isAssigned ? 'Remove' : 'Add'}
                     </Button>
