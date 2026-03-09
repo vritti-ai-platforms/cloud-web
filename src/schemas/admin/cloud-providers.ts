@@ -8,6 +8,7 @@ export interface CloudProvider {
   logoDarkUrl: string;
   regionCount: number;
   deploymentCount: number;
+  canDelete: boolean;
   createdAt: string;
   updatedAt: string | null;
 }

@@ -154,6 +154,7 @@ function getColumns({ onDelete }: ColumnActions): ColumnDef<Industry, unknown>[]
               label: 'Delete',
               icon: Trash2,
               variant: 'destructive',
+              disabled: !row.original.canDelete,
               onClick: () => onDelete(row.original),
             },
           ]}

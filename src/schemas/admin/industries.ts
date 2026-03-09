@@ -9,6 +9,7 @@ export interface Industry {
   description: string | null;
   createdAt: string;
   updatedAt: string | null;
+  canDelete: boolean;
 }
 
 export interface IndustriesResponse {

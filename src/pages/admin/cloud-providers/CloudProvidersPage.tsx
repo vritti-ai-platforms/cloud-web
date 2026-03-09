@@ -164,6 +164,7 @@ function getColumns(onDelete: (id: string, name: string) => Promise<void>): Colu
               label: 'Delete',
               icon: Trash2,
               variant: 'destructive',
+              disabled: !row.original.canDelete,
               onClick: () => onDelete(row.original.id, row.original.name),
             },
           ]}
