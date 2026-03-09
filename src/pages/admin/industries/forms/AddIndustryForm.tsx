@@ -15,7 +15,7 @@ interface AddIndustryFormProps {
 export const AddIndustryForm: React.FC<AddIndustryFormProps> = ({ onSuccess, onCancel }) => {
   const form = useForm<CreateIndustryData>({
     resolver: zodResolver(createIndustrySchema),
-    defaultValues: { name: '', code: '', slug: '', description: '' },
+    defaultValues: { name: '', code: '', description: '' },
   });
 
   const createMutation = useCreateIndustry({
@@ -40,7 +40,6 @@ export const AddIndustryForm: React.FC<AddIndustryFormProps> = ({ onSuccess, onC
         placeholder="e.g. HLTH"
         description="Short identifier used across the platform"
       />
-      <TextField name="slug" label="Slug" placeholder="e.g. healthcare" description="URL-friendly identifier" />
       <TextField
         name="description"
         label="Description"

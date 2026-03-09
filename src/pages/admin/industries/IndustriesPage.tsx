@@ -58,7 +58,6 @@ export const IndustriesPage = () => {
           columns: [
             { id: 'name', label: 'Name' },
             { id: 'code', label: 'Code' },
-            { id: 'slug', label: 'Slug' },
           ],
           searchAll: true,
         }}
@@ -109,15 +108,6 @@ function getColumns({ onDelete }: ColumnActions): ColumnDef<Industry, unknown>[]
       cell: ({ row }) => (
         <Badge variant="outline" className="font-mono text-[10px] font-medium">
           {row.original.code}
-        </Badge>
-      ),
-    },
-    {
-      accessorKey: 'slug',
-      header: 'Slug',
-      cell: ({ row }) => (
-        <Badge variant="outline" className="font-mono text-[10px] font-medium">
-          {row.original.slug}
         </Badge>
       ),
     },

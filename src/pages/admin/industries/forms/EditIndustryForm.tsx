@@ -20,7 +20,6 @@ export const EditIndustryForm: React.FC<EditIndustryFormProps> = ({ industry, on
     defaultValues: {
       name: industry.name,
       code: industry.code,
-      slug: industry.slug,
       description: industry.description ?? '',
     },
   });
@@ -46,7 +45,6 @@ export const EditIndustryForm: React.FC<EditIndustryFormProps> = ({ industry, on
         placeholder="e.g. HLTH"
         description="Short identifier used across the platform"
       />
-      <TextField name="slug" label="Slug" placeholder="e.g. healthcare" />
       <TextField
         name="description"
         label="Description (Optional)"
