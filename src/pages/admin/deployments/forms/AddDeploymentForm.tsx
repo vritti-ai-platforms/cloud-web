@@ -1,14 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useCreateDeployment } from '@hooks/admin/deployments';
-import { useRegions } from '@hooks/admin/regions';
-// import { useRegionCloudProviders } from '@hooks/admin/regions';
 import { Button } from '@vritti/quantum-ui/Button';
 import { Form } from '@vritti/quantum-ui/Form';
 import { PasswordField } from '@vritti/quantum-ui/PasswordField';
 import { Select } from '@vritti/quantum-ui/Select';
 import { TextField } from '@vritti/quantum-ui/TextField';
+import { CloudProviderSelector } from '@vritti/quantum-ui/selects/cloud-provider';
+import { RegionSelector } from '@vritti/quantum-ui/selects/region';
 import type React from 'react';
-import { useForm, useWatch } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { type CreateDeploymentData, createDeploymentSchema } from '@/schemas/admin/deployments';
 
 interface AddDeploymentFormProps {
@@ -21,14 +21,6 @@ export const AddDeploymentForm: React.FC<AddDeploymentFormProps> = ({ onSuccess,
     resolver: zodResolver(createDeploymentSchema),
     defaultValues: { name: '', nexusUrl: '', webhookSecret: '', type: 'shared' },
   });
-
-  const selectedRegionId = useWatch({ control: form.control, name: 'regionId' });
-
-  const { data: regionsResponse } = useRegions();
-  const regions = regionsResponse?.result ?? [];
-
-  // const { data: providers = [] } = useRegionCloudProviders(selectedRegionId ?? '', { enabled: !!selectedRegionId });
-  const providers: { id: string; name: string; code: string }[] = [];
 
   const createMutation = useCreateDeployment({
     onSuccess: () => {
@@ -47,20 +39,13 @@ export const AddDeploymentForm: React.FC<AddDeploymentFormProps> = ({ onSuccess,
       <TextField name="name" label="Deployment Name" placeholder="e.g. US East Production" />
       <TextField name="nexusUrl" label="Nexus URL" placeholder="https://nexus-us-east.vritti.io" />
       <PasswordField name="webhookSecret" label="Webhook Secret" placeholder="whsec_..." />
-      <Select
+      <RegionSelector
         name="regionId"
         label="Region"
         placeholder="Select region"
-        options={regions.map((r) => ({ value: r.id, label: `${r.name} (${r.code})` }))}
         onChange={() => form.setValue('cloudProviderId', '')}
       />
-      <Select
-        name="cloudProviderId"
-        label="Cloud Provider"
-        placeholder={selectedRegionId ? 'Select provider' : 'Select a region first'}
-        options={providers.map((p) => ({ value: p.id, label: `${p.name} (${p.code})` }))}
-        disabled={!selectedRegionId || providers.length === 0}
-      />
+      <CloudProviderSelector name="cloudProviderId" label="Cloud Provider" placeholder="Select provider" />
       <Select
         name="type"
         label="Deployment Type"

@@ -1,11 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useUpdateDeployment } from '@hooks/admin/deployments';
-import { useRegions } from '@hooks/admin/regions';
-// import { useRegionCloudProviders } from '@hooks/admin/regions';
 import { Button } from '@vritti/quantum-ui/Button';
 import { Form } from '@vritti/quantum-ui/Form';
 import { Select } from '@vritti/quantum-ui/Select';
 import { TextField } from '@vritti/quantum-ui/TextField';
+import { CloudProviderSelector } from '@vritti/quantum-ui/selects/cloud-provider';
+import { RegionSelector } from '@vritti/quantum-ui/selects/region';
 import type React from 'react';
 import { useForm } from 'react-hook-form';
 import type { Deployment } from '@/schemas/admin/deployments';
@@ -30,14 +30,6 @@ export const EditDeploymentForm: React.FC<EditDeploymentFormProps> = ({ deployme
     },
   });
 
-  // const selectedRegionId = useWatch({ control: form.control, name: 'regionId' });
-
-  const { data: regionsResponse } = useRegions();
-  const regions = regionsResponse?.result ?? [];
-
-  // const { data: providers = [] } = useRegionCloudProviders(selectedRegionId ?? deployment.regionId, { enabled: !!(selectedRegionId ?? deployment.regionId) });
-  const providers: { id: string; name: string; code: string }[] = [];
-
   const updateMutation = useUpdateDeployment({
     onSuccess: () => onSuccess(),
   });
@@ -46,20 +38,13 @@ export const EditDeploymentForm: React.FC<EditDeploymentFormProps> = ({ deployme
     <Form form={form} mutation={updateMutation} showRootError transformSubmit={(data) => ({ id: deployment.id, data })}>
       <TextField name="name" label="Deployment Name" placeholder="e.g. US East Production" />
       <TextField name="nexusUrl" label="Nexus URL" placeholder="https://nexus-us-east.vritti.io" />
-      <Select
+      <RegionSelector
         name="regionId"
         label="Region"
         placeholder="Select region"
-        options={regions.map((r) => ({ value: r.id, label: `${r.name} (${r.code})` }))}
         onChange={() => form.setValue('cloudProviderId', '')}
       />
-      <Select
-        name="cloudProviderId"
-        label="Cloud Provider"
-        placeholder="Select provider"
-        options={providers.map((p) => ({ value: p.id, label: `${p.name} (${p.code})` }))}
-        disabled={providers.length === 0}
-      />
+      <CloudProviderSelector name="cloudProviderId" label="Cloud Provider" placeholder="Select provider" />
       <Select
         name="type"
         label="Deployment Type"
