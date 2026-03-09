@@ -6,7 +6,7 @@ import {
   useDeploymentPlans,
   useRemoveDeploymentPlan,
 } from '@hooks/admin/deployments';
-import { cn, Empty } from '@vritti/quantum-ui';
+import { cn } from '@vritti/quantum-ui';
 import { Badge } from '@vritti/quantum-ui/Badge';
 import { Button } from '@vritti/quantum-ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '@vritti/quantum-ui/Card';
