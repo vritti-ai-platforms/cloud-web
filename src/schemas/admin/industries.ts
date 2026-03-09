@@ -26,3 +26,12 @@ export const createIndustrySchema = z.object({
 });
 
 export type CreateIndustryData = z.infer<typeof createIndustrySchema>;
+
+export const updateIndustrySchema = z.object({
+  name: z.string().min(1, 'Industry name is required'),
+  code: z.string().min(1, 'Industry code is required').max(100, 'Code must be 100 characters or less'),
+  slug: z.string().min(1, 'Industry slug is required').max(100, 'Slug must be 100 characters or less'),
+  description: z.string().optional(),
+});
+
+export type UpdateIndustryData = z.infer<typeof updateIndustrySchema>;

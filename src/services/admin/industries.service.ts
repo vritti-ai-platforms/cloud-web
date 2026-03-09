@@ -1,5 +1,5 @@
 import { axios } from '@vritti/quantum-ui/axios';
-import type { CreateIndustryData, IndustriesResponse } from '@/schemas/admin/industries';
+import type { CreateIndustryData, IndustriesResponse, UpdateIndustryData } from '@/schemas/admin/industries';
 
 // Fetches industries for the data table — server applies filter/sort state
 export function getIndustries(): Promise<IndustriesResponse> {
@@ -14,4 +14,15 @@ export function createIndustry(data: CreateIndustryData): Promise<{ success: boo
 // Deletes an industry by ID
 export function deleteIndustry(id: string): Promise<void> {
   return axios.delete(`admin-api/industries/${id}`).then(() => undefined);
+}
+
+// Updates an industry by ID
+export function updateIndustry({
+  id,
+  data,
+}: {
+  id: string;
+  data: UpdateIndustryData;
+}): Promise<{ success: boolean; message: string }> {
+  return axios.patch<{ success: boolean; message: string }>(`admin-api/industries/${id}`, data).then((r) => r.data);
 }
