@@ -123,6 +123,12 @@ export const DeploymentViewPage = () => {
         description="This action cannot be undone. All associated plan assignments will be removed."
         buttonText="Delete Deployment"
         onClick={handleDelete}
+        disabled={!!deployment.organizationCount}
+        warning={
+          deployment.organizationCount
+            ? `This deployment is used by ${deployment.organizationCount} organization${deployment.organizationCount !== 1 ? 's' : ''}. Remove all associated organizations before deleting.`
+            : undefined
+        }
       />
 
       {/* Edit dialog */}

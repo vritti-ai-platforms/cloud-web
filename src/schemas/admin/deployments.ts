@@ -17,6 +17,7 @@ export interface Deployment {
   cloudProviderCode?: string;
   createdAt: string;
   updatedAt: string | null;
+  organizationCount?: number;
 }
 
 export const createDeploymentSchema = z.object({
