@@ -19,14 +19,6 @@ export interface Deployment {
   updatedAt: string | null;
 }
 
-export interface DeploymentPlanListItem {
-  planId: string;
-  planName: string;
-  planCode: string;
-  industryId: string;
-  industryName: string;
-}
-
 export const createDeploymentSchema = z.object({
   name: z.string().min(1, 'Name is required').max(255),
   nexusUrl: z.string().url('Must be a valid URL').max(500),
@@ -45,20 +37,6 @@ export const updateDeploymentSchema = z.object({
   type: z.enum(['shared', 'dedicated']).optional(),
   status: z.enum(['active', 'stopped', 'provisioning']).optional(),
 });
-
-export interface DeploymentPlanIndustryPrice {
-  industryId: string;
-  industryName: string;
-  price: string | null;
-  currency: string | null;
-}
-
-export interface DeploymentPlanPrice {
-  planId: string;
-  planName: string;
-  planCode: string;
-  industries: DeploymentPlanIndustryPrice[];
-}
 
 export const assignPlanSchema = z.object({
   planId: z.string().uuid('Please select a plan'),

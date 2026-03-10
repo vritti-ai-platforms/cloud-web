@@ -5,8 +5,6 @@ import type {
   CreateDeploymentData,
   Deployment,
   DeploymentPlanAssignment,
-  DeploymentPlanListItem,
-  DeploymentPlanPrice,
   UpdateDeploymentData,
 } from '@/schemas/admin/deployments';
 
@@ -38,16 +36,6 @@ export function updateDeployment({ id, data }: { id: string; data: UpdateDeploym
 // Deletes a deployment by ID
 export function deleteDeployment(id: string): Promise<void> {
   return axios.delete(`admin-api/deployments/${id}`).then(() => undefined);
-}
-
-// Fetches plan+industry assignments for a deployment
-export function getDeploymentPlans(deploymentId: string): Promise<DeploymentPlanListItem[]> {
-  return axios.get<DeploymentPlanListItem[]>(`admin-api/deployments/${deploymentId}/plans`).then((r) => r.data);
-}
-
-// Fetches plan+industry assignments with prices for a deployment
-export function getDeploymentPlanPrices(deploymentId: string): Promise<DeploymentPlanPrice[]> {
-  return axios.get<DeploymentPlanPrice[]>(`admin-api/deployments/${deploymentId}/plan-prices`).then((r) => r.data);
 }
 
 // Assigns a plan+industry combo to a deployment
