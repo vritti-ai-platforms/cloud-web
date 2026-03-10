@@ -68,3 +68,18 @@ export const assignPlanSchema = z.object({
 export type CreateDeploymentData = z.infer<typeof createDeploymentSchema>;
 export type UpdateDeploymentData = z.infer<typeof updateDeploymentSchema>;
 export type AssignPlanData = z.infer<typeof assignPlanSchema>;
+
+export interface DeploymentPlanAssignmentIndustry {
+  industryId: string;
+  industryName: string;
+  price: string | null;
+  currency: string | null;
+  isAssigned: boolean;
+}
+
+export interface DeploymentPlanAssignment {
+  planId: string;
+  planName: string;
+  planCode: string;
+  industries: DeploymentPlanAssignmentIndustry[];
+}

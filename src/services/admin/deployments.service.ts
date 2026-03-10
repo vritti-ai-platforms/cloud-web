@@ -4,6 +4,7 @@ import type {
   AssignPlanData,
   CreateDeploymentData,
   Deployment,
+  DeploymentPlanAssignment,
   DeploymentPlanListItem,
   DeploymentPlanPrice,
   UpdateDeploymentData,
@@ -63,4 +64,11 @@ export function assignDeploymentPlan({
 // Removes a plan+industry assignment from a deployment
 export function removeDeploymentPlan({ id, data }: { id: string; data: AssignPlanData }): Promise<MutationResponse> {
   return axios.delete<MutationResponse>(`admin-api/deployments/${id}/plans`, { data }).then((r) => r.data);
+}
+
+// Fetches all plan+industry combos with assignment status for a deployment
+export function getDeploymentPlanAssignments(deploymentId: string): Promise<DeploymentPlanAssignment[]> {
+  return axios
+    .get<DeploymentPlanAssignment[]>(`admin-api/deployments/${deploymentId}/plan-assignments`)
+    .then((r) => r.data);
 }
